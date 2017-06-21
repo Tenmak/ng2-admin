@@ -1,0 +1,6 @@
+@import './../../../theme/sass/conf/conf.scss';
+
+:host /deep/ .esri-maps {
+    width: 100%;
+    height: calc(100vh - 283px);
+}

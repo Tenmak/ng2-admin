@@ -1,0 +1,3 @@
+volumes/log
+*.log
+*.zip

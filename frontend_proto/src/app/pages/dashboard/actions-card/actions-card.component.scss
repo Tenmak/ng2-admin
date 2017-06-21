@@ -1,0 +1,64 @@
+@import "../../../theme/sass/conf/conf";
+/deep/.card.popular-app {
+    &>.card-body {
+        padding: 0;
+    }
+    .border {
+        border-bottom: 2px solid $border-light;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+    .actions-card-header-container {
+        position: relative;
+        padding: 20px 20px;
+        border-bottom: 1px solid $border-light;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        font-size: 25px;
+        .actions-card-header {
+            padding-top: 20px;
+            font-size: 16px;
+        }
+    }
+    .actions-card-data {
+        padding: 20px 20px;
+        font-size: 16px;
+        text-align: center;
+        border-bottom: 1px solid $border-light;
+        .info-label {
+            font-size: 11px;
+        }
+        .info-data {
+            padding-top: 6px;
+        }
+    }
+    .actions-card-link {
+        font-size: 16px;
+        padding: 20px 20px;
+        border-bottom: 1px solid $border-light;
+        .row-item:first {
+            padding-top: 0px;
+        }
+        .row-item {
+            padding-top: 5px;
+        }
+        i:hover {
+            cursor: pointer;
+        }
+    }
+    .row {
+        margin: 0;
+        actions: flex;
+        justify-content: space-between;
+        >div {
+            padding: 0;
+        }
+    }
+    .custom-border {
+        border: none !important;
+    }
+}
+
+/deep/.blur .card.popular-app .actions-card-header-container {
+    background: rgba(0, 0, 0, 0.5);
+}

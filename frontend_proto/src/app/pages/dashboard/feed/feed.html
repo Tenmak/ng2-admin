@@ -1,0 +1,17 @@
+<div class="feed-messages-container">
+    <div class="feed-message" *ngFor="let message of feed" (click)="expandMessage(message)">
+        <div class="text-block text-message">
+            <div class="message-content line-clamp" [ngClass]="{'line-clamp-2' : !message.expanded}">
+                {{ message.text }}
+            </div>
+            <div [ngClass]="{'hidden': !message.expanded}" class="message-time">
+                <div class="post-time">
+                    {{ message.time }}
+                </div>
+                <div class="ago-time">
+                    {{ message.ago }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

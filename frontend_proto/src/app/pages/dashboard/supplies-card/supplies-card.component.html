@@ -1,0 +1,48 @@
+<div class="supplies-card-header-container">
+    <span class="info-header" translate>{{'dashboard.supplies_card.title'}}</span>
+</div>
+
+<div class="supplies-card-data row">
+    <div class="col-4 text-left">
+        <div class="info-label" translate>{{'dashboard.supplies_card.to_be_processed'}}</div>
+        <div class="info-data">35109</div>
+    </div>
+    <div class="col-4 text-center">
+        <div class="info-label" translate>{{'dashboard.supplies_card.in_failure'}}</div>
+        <div class="info-data">19</div>
+    </div>
+    <div class="col-4 text-right">
+        <div class="info-label" translate>{{'dashboard.supplies_card.succeeded'}}</div>
+        <div class="info-data">0</div>
+    </div>
+</div>
+<div class="supplies-card-link row custom-border">
+    <div class="col-10 row-item:first" translate>{{'dashboard.supplies_card.consult_demands_on_hold'}}</div>
+    <div class="col-2 row-item:first text-right">
+        <i class="fa fa-arrow-circle-right" (click)="goTo('/toto')"></i>
+    </div>
+    <div class="col-10 row-item" translate>{{'dashboard.supplies_card.consult_demands'}}</div>
+    <div class="col-2 row-item text-right">
+        <i class="fa fa-arrow-circle-right" (click)="goTo('/toto')"></i>
+    </div>
+</div>
+
+<div class="border"></div>
+
+<div class="supplies-card-header-container">
+    <span class="info-header" translate>{{'dashboard.supplies_card.extraction'}}</span>
+
+    <div class="supplies-card-header row">
+        <div class="col-9" translate>{{'dashboard.supplies_card.last_generation'}}</div>
+        <div class="col-3 text-right">
+            <i class="fa fa-info-circle" (click)="goTo('/toto')"></i>
+        </div>
+    </div>
+</div>
+
+<div class="supplies-card-link row custom-border">
+    <div class="col-10" translate>{{'dashboard.supplies_card.download_files'}}</div>
+    <div class="col-2 text-right">
+        <i class="fa fa-arrow-circle-right" (click)="goTo('/toto')"></i>
+    </div>
+</div>

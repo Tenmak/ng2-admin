@@ -1,0 +1,36 @@
+<html>
+  <header>
+    <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.1/css/calcite-web.min.css">
+    <script src="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.1/js/calcite-web.min.js"></script>
+  </header>
+
+  <body>
+    <div class="block-group block-group-3-up">
+      <!--div class="block"><div class="panel">Block</div></div-->
+      <div class="block"></div>
+      <div class="block"><div class="panel">
+        <form action="" method="post">
+          <label>
+            Email
+            <!--input type="email" class="input-success" value="Email" required-->
+            <input type="email" required placeholder="L'email doit avoir la forme suivante user@domain" class="input-error">
+            <div class="input-error-message is-active">
+              Le mot de passe ne respecte pas les exigences de syntaxe.
+            </div>
+          </label>
+          
+          <label>
+            Mot de passe
+            <input type="text" required placeholder="Le mot de passe doit avoir au minimum 12 caractères" class="input-error">
+            <div class="input-error-message is-active">
+              Le mot de passe ne respecte pas les exigences de longueur.
+            </div>
+          </label>
+          <button style="align=center;" type="submit">Se connecter</button>
+        </form>
+      </div></div>
+      <div class="block"></div>
+    </div>
+  </body>
+
+</html>
