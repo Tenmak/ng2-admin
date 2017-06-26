@@ -12,7 +12,8 @@ const routes: Routes = [
     children: [
       { path: 'leafletmaps', component: LeafletMapComponent },
       {
-        path: 'esrimaps', component: EsriMapComponent, resolve: {
+        path: 'esrimaps', component: EsriMapComponent,
+        resolve: {
           esriModules: EsriMapResolveService
         }
       },

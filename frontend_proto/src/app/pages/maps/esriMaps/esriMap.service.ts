@@ -12,7 +12,7 @@ export class EsriMapResolveService implements Resolve<any> {
     // only load the ArcGIS API for JavaScript when we get to this route
     return this.esriLoader.load({
       // use a specific version of the API instead of the latest
-      url: '//js.arcgis.com/3.18/'
+      url: '//js.arcgis.com/3.20/'
     }).then(() => {
       // load the map class needed to create a new map
       // and make it available in the route's data

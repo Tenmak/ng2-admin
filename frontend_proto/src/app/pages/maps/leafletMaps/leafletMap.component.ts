@@ -21,34 +21,16 @@ export class LeafletMapComponent implements AfterViewInit {
 
     L.Icon.Default.imagePath = 'assets/img/theme/vendor/leaflet';
 
-    // const map = L.map(el).setView([51.505, -0.09], 13);
     const map = L.map(el).setView([48.858435, 2.341483], 13);
-
+    // Set the Esri link with the library
     L.esri = esri_leaflet;
 
-    // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    //   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    // }).addTo(map);
-
-    // L.marker([51.5, -0.09]).addTo(map)
-    //   .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-    //   .openPopup();
-
-    L.esri.basemapLayer('Gray').addTo(map);
+    L.esri.basemapLayer('DarkGray').addTo(map);
 
     const layer = L.esri.dynamicMapLayer({
       url: 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/MapServer'
     }).addTo(map);
 
-    /*l
-    layer.bindPopup(function (error, featureCollection) {
-      if(error || featureCollection.features.length === 0) {
-        return false;
-      } else {
-        return 'Informations: ' + featureCollection.features[0].properties.CLASS_DESC;
-      }
-    });
-    */
     const popupTemplate = '<h3>{OBJECTID}</h3>ID_VERSION_GEOM:{ID_VERSION_GEOM}<br><small>STATUT_GEOM: {STATUT_GEOM}<small>';
 
     layer.bindPopup(function (error, featureCollection) {
@@ -58,8 +40,5 @@ export class LeafletMapComponent implements AfterViewInit {
         return L.Util.template(popupTemplate, featureCollection.features[0].properties)
       }
     });
-
-
-
   }
 }
