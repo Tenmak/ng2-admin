@@ -148,9 +148,9 @@
   version "0.0.3"
   resolved "https://registry.npmjs.org/@ngx-translate/http-loader/-/http-loader-0.0.3.tgz#8346c8d2d6f630254601029668f17abe2afe8a9b"
 
-"@types/arcgis-js-api@^3.20.0":
-  version "3.20.0"
-  resolved "https://registry.npmjs.org/@types/arcgis-js-api/-/arcgis-js-api-3.20.0.tgz#1e89cb024ac28281310c8ea96e680ac747a879d1"
+"@types/arcgis-js-api@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.npmjs.org/@types/arcgis-js-api/-/arcgis-js-api-4.3.1.tgz#ed7ae513efb6fb8d64e610f0746fb74d22de7947"
 
 "@types/fullcalendar@2.7.40":
   version "2.7.40"

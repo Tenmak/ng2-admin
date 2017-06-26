@@ -1,10 +1,6 @@
 import { Component, ElementRef, AfterViewInit } from '@angular/core';
-
 import 'leaflet-map';
-import 'esri-leaflet';
-
-declare let require: any;
-const esri_leaflet = require('esri-leaflet');
+import * as esri_leaflet from 'esri-leaflet';
 
 @Component({
   selector: 'reflex-leaflet-map',
