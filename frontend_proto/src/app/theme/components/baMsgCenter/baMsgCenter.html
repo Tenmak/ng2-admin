@@ -6,7 +6,7 @@
       <div class="notification-ring"></div>
     </a>
 
-    <div class="top-dropdown-menu dropdown-menu" aria-labelledby="msg-dd1">
+    <div class="top-dropdown-menu-notifications dropdown-menu" aria-labelledby="msg-dd1">
       <i class="dropdown-arr"></i>
 
       <div class="header clearfix">
@@ -16,8 +16,7 @@
       </div>
       <div class="msg-list">
         <a *ngFor="let msg of notifications" href class="clearfix">
-          <div class="img-area"><img [ngClass]="{'photo-msg-item': !msg.image}"
-                                     src="{{ ( msg.image ||  (msg.name | baProfilePicture)) }}"></div>
+          <!--<div class="img-area"><img [ngClass]="{'photo-msg-item': !msg.image}" src="{{ ( msg.image ||  (msg.name | baProfilePicture)) }}"></div>-->
           <div class="msg-area">
             <div>{{ msg.text }}</div>
             <span>{{ msg.time }}</span>
@@ -27,29 +26,23 @@
       <a href>See all notifications</a>
     </div>
   </li>
+
   <li class="dropdown">
-    <a href class="msg dropdown-toggle" id="msg-dd2" data-toggle="dropdown" aria-expanded="false">
-      <i class="fa fa-envelope-o"></i><span>{{ messages.length }}</span>
-      <div class="notification-ring"></div>
+    <a href class="dropdown-toggle" id="msg-dd2" data-toggle="dropdown" aria-expanded="false">
+      <i class="fa fa-flag-o"></i>
     </a>
-    <div class="top-dropdown-menu dropdown-menu" aria-labelledby="msg-dd2">
+
+    <div class="top-dropdown-menu-language dropdown-menu" aria-labelledby="msg-dd2">
       <i class="dropdown-arr"></i>
-      <div class="header clearfix">
-        <strong>Messages</strong>
-        <a href>Mark All as Read</a>
-        <a href>Settings</a>
-      </div>
+
       <div class="msg-list">
-        <a *ngFor="let msg of messages" href class="clearfix">
-          <div class="img-area"><img [ngClass]="{'photo-msg-item': !msg.image}"
-                                     src="{{ ( msg.image ||  (msg.name | baProfilePicture)) }}"></div>
-          <div class="msg-area">
-            <div>{{ msg.text }}</div>
-            <span>{{ msg.time }}</span>
+        <a *ngFor="let language of languages" class="clearfix">
+          <div class="language-area" (click)="changeLanguage(language.key)">
+            <img src="{{ language.image }}">
+            <span translate>{{'general.language.' + language.name }}</span>
           </div>
         </a>
       </div>
-      <a href>See all messages</a>
     </div>
   </li>
 </ul>

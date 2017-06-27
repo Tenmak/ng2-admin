@@ -8,7 +8,7 @@ import { DashboardComponent } from './dashboard.component';
 import { routing } from './dashboard.routing';
 
 import { ActionsCardComponent } from './actions-card/actions-card.component';
-import { SuppliesCardComponent } from './supplies-card/supplies-card.component';
+import { FeedsCardComponent } from './feeds-card/feeds-card.component';
 import { PieChart } from './pieChart';
 import { TrafficChart } from './trafficChart';
 import { FeedComponent } from './feed/feed.component';
@@ -26,7 +26,7 @@ import { TrafficChartService } from './trafficChart/trafficChart.service';
   ],
   declarations: [
     ActionsCardComponent,
-    SuppliesCardComponent,
+    FeedsCardComponent,
     PieChart,
     TrafficChart,
     FeedComponent,

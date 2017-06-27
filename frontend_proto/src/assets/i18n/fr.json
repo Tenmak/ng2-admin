@@ -1,0 +1,44 @@
+{
+    "general": {
+        "home": "Accueil",
+        "menu": {
+            "dashboard": "Dashboard",
+            "maps": "Maps",
+            "leaflet_maps": "Map Leaflet",
+            "esri_maps": "Map Esri"
+        },
+        "language": {
+            "french": "Français",
+            "english": "Anglais"
+        },
+        "created_with": "Créé avec"
+    },
+    "dashboard": {
+        "acquisition_channels": "Work in progress...",
+        "feed": "Actualités",
+        "actions_card": {
+            "title": "Arrêts",
+            "demands_summary": "Synthèse de mes demandes :",
+            "accepted_demands": "Demandes acceptées",
+            "refused_demands": "Demandes refusées",
+            "on_hold_demands": "Demandes en attente",
+            "consult_demands_on_hold": "Consulter les demandes en attente",
+            "consult_demands": "Consulter toutes mes demandes",
+            "extraction": "Extraction",
+            "last_generation": "Date de la dernière génération",
+            "download_files": "Téléchargement des fichiers"
+        },
+        "feeds_card": {
+            "title": "Alimentations",
+            "to_be_processed": "A traiter : ",
+            "in_failure": "En échec",
+            "succeeded": "Réussies",
+            "consult_details": "Consulter les détails des alimentations",
+            "identifiers": "Identifiants",
+            "identifiers_history": "Voir l'historique de mes téléchargements d'ID"
+        },
+        "traffic_chart": {
+            "view_total": "Total vues"
+        }
+    }
+}
