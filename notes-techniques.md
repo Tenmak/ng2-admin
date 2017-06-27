@@ -17,3 +17,6 @@ code &
 - Gulp
 - Browserify
 - angular-cli
+
+
+[Build Tools: état de l'art](http://stateofjs.com/2016/buildtools/)
