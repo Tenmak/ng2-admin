@@ -20,3 +20,7 @@ code &
 
 
 [Build Tools: état de l'art](http://stateofjs.com/2016/buildtools/)
+
+## Normes de standards
+
+ ES6 compiler
