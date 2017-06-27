@@ -1,9 +1,13 @@
 import { NgModule, ApplicationRef } from '@angular/core';
+import { Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
@@ -12,6 +16,11 @@ import { AppComponent } from './app.component';
 import { GlobalState } from './global.state';
 
 import { AppState, InternalStateType } from './app.service';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: Http) {
+  return new TranslateHttpLoader(http);
+}
 
 // Application wide providers used for theming
 const APP_PROVIDERS = [
@@ -29,6 +38,13 @@ export interface StoreType {
   imports: [
     BrowserModule,
     HttpModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [Http],
+      }
+    }),
     RouterModule,
     FormsModule,
     ReactiveFormsModule,

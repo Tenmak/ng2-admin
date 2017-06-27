@@ -36,8 +36,8 @@
       <i class="dropdown-arr"></i>
 
       <div class="msg-list">
-        <a *ngFor="let language of languages" class="clearfix">
-          <div class="language-area" (click)="changeLanguage(language.key)">
+        <a *ngFor="let language of languages" class="clearfix" (click)="changeLanguage(language.key)">
+          <div class="language-area">
             <img src="{{ language.image }}">
             <span translate>{{'general.language.' + language.name }}</span>
           </div>

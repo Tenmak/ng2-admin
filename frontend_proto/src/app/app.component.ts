@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { GlobalState } from './global.state';
 import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './theme/services';
@@ -17,10 +18,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     private _state: GlobalState,
     private _imageLoader: BaImageLoaderService,
     private _spinner: BaThemeSpinner,
-    private themeConfig: BaThemeConfig
+    private themeConfig: BaThemeConfig,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit() {
+    this.translateService.addLangs(['en', 'fr']);
+    this.translateService.setDefaultLang('fr');
+    this.translateService.use('fr');
+
     this.themeConfig.config();
 
     this._loadImages();

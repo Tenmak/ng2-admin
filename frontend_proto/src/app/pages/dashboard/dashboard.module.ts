@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AppTranslationModule } from 'app/app.translation.module';
 import { NgaModule } from 'app/theme/nga.module';
 
 import { DashboardComponent } from './dashboard.component';
@@ -20,7 +19,6 @@ import { TrafficChartService } from './trafficChart/trafficChart.service';
   imports: [
     CommonModule,
     FormsModule,
-    AppTranslationModule,
     NgaModule,
     routing
   ],
