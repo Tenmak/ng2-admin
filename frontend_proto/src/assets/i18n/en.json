@@ -25,7 +25,7 @@
             "consult_demands_on_hold": "Consult demands on hold",
             "consult_demands": "Consult all my demands",
             "extraction": "Extraction",
-            "last_generation": "Date of last generation",
+            "last_generation": "Date of last generation :",
             "download_files": "Download the files"
         },
         "feeds_card": {

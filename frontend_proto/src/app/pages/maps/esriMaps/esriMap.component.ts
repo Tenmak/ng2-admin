@@ -45,7 +45,6 @@ export class EsriMapComponent implements OnInit {
     this.esriLoader.loadModules(['esri/layers/ArcGISDynamicMapServiceLayer'])
       .then(([ArcGISDynamicMapServiceLayer]) => {
         const stopsLayer = new ArcGISDynamicMapServiceLayer(this.layerURL);
-
         this.map.addLayer(stopsLayer);
         this.configureLayerInteractions();
       });

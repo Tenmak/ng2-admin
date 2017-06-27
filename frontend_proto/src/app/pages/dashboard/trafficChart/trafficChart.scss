@@ -13,6 +13,7 @@
 :host /deep/ .channels-block {
   width: 100%;
   position: relative;
+  margin-top: 2%;
 
   .chart-bg {
     position: absolute;
@@ -138,7 +139,6 @@
   }
 
   @media (max-width: $resM) {
-
     .card.medium-card.traffic-panel {
       height: auto;
     }

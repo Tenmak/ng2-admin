@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
@@ -49,7 +48,6 @@ export interface StoreType {
     FormsModule,
     ReactiveFormsModule,
     NgaModule.forRoot(),
-    NgbModule.forRoot(),
     PagesModule,
     routing
   ],

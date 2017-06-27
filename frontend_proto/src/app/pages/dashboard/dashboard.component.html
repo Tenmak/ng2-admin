@@ -1,25 +1,51 @@
 <div class="row">
-    <ba-card class="col-xlg-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12" baCardClass="popular-app medium-card">
-        <reflex-actions-card></reflex-actions-card>
-    </ba-card>
+  <ba-card class="col-xlg-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12" baCardClass="popular-app medium-card">
+    <reflex-actions-card></reflex-actions-card>
+  </ba-card>
 
-    <ba-card class="col-xlg-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12" baCardClass="popular-app medium-card">
-        <reflex-feeds-card></reflex-feeds-card>
-    </ba-card>
+  <ba-card class="col-xlg-4 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12" baCardClass="popular-app medium-card">
+    <reflex-feeds-card></reflex-feeds-card>
+  </ba-card>
 
-    <div class="col-xlg-4 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-        <ba-card title="dashboard.feed" baCardClass="medium-card with-scroll feed-panel">
-            <reflex-feed></reflex-feed>
-        </ba-card>
-    </div>
+  <div class="col-xlg-4 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <ba-card title="dashboard.feed" baCardClass="medium-card with-scroll feed-panel">
+      <reflex-feed></reflex-feed>
+    </ba-card>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-xlg-9 col-xl-6 col-lg-6  col-md-12 col-sm-12 col-12">
-        <div class="row">
-            <ba-card class="col-xlg-12 col-xl-6 col-lg-12 col-sm-12 col-12" title="dashboard.acquisition_channels" baCardClass="traffic-panel medium-card">
-                <traffic-chart></traffic-chart>
-            </ba-card>
-        </div>
+  <div class="col-xlg-12 col-xl-12 col-lg-12  col-md-12 col-sm-12 col-12">
+    <div class="row">
+      <!--<ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-sm-12 col-12" baCardClass="traffic-panel medium-card">
+        <reflex-traffic-chart></reflex-traffic-chart>
+      </ba-card>-->
+
+      <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-sm-12 col-12" baCardClass="traffic-panel medium-card">
+        <ngb-tabset>
+          <ngb-tab id="tab-preventchange1" title="Simple">
+            <ng-template ngbTabContent>
+              <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
+                master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
+                keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat
+                salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab id="tab-preventchange2" title="I can't be selected...">
+            <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+              <reflex-traffic-chart></reflex-traffic-chart>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab title="But I can!">
+            <ng-template ngbTabContent>
+              <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth
+                master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
+                keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat
+                salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </ba-card>
     </div>
+  </div>
 </div>

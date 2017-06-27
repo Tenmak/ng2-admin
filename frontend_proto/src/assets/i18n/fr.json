@@ -25,7 +25,7 @@
             "consult_demands_on_hold": "Consulter les demandes en attente",
             "consult_demands": "Consulter toutes mes demandes",
             "extraction": "Extraction",
-            "last_generation": "Date de la dernière génération",
+            "last_generation": "Date de la dernière génération :",
             "download_files": "Téléchargement des fichiers"
         },
         "feeds_card": {

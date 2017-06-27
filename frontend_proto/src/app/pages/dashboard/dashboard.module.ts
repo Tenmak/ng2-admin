@@ -2,17 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from 'app/theme/nga.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardComponent } from './dashboard.component';
 import { routing } from './dashboard.routing';
 
 import { ActionsCardComponent } from './actions-card/actions-card.component';
 import { FeedsCardComponent } from './feeds-card/feeds-card.component';
-import { PieChart } from './pieChart';
-import { TrafficChart } from './trafficChart';
+import { TrafficChartComponent } from './trafficChart/trafficChart.component';
 import { FeedComponent } from './feed/feed.component';
 import { FeedService } from './feed/feed.service';
-import { PieChartService } from './pieChart/pieChart.service';
 import { TrafficChartService } from './trafficChart/trafficChart.service';
 
 @NgModule({
@@ -20,19 +19,18 @@ import { TrafficChartService } from './trafficChart/trafficChart.service';
     CommonModule,
     FormsModule,
     NgaModule,
-    routing
+    routing,
+    NgbModule.forRoot(),
   ],
   declarations: [
     ActionsCardComponent,
     FeedsCardComponent,
-    PieChart,
-    TrafficChart,
+    TrafficChartComponent,
     FeedComponent,
     DashboardComponent
   ],
   providers: [
     FeedService,
-    PieChartService,
     TrafficChartService,
   ]
 })
