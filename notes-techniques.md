@@ -19,6 +19,9 @@ code &
 - Browserify
 - angular-cli
 
+## Framework
+
+- Angular + typescript
 
 [Build Tools: état de l'art](http://stateofjs.com/2016/buildtools/)
 
