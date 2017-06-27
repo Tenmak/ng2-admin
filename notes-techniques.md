@@ -12,6 +12,7 @@ code &
 
 - npm
 - yarn
+- yeoman
 - Webpack
 - Grunt
 - Gulp
