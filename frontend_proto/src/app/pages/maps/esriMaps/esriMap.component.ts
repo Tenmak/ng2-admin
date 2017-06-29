@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { EsriLoaderService } from 'angular-esri-loader';
 
+import { MapParameters, FeatureLayerConfiguration } from './esriMap.interface';
+
 @Component({
   selector: 'reflex-esri-map',
   templateUrl: './esriMap.component.html',
@@ -11,7 +13,9 @@ import { EsriLoaderService } from 'angular-esri-loader';
 export class EsriMapComponent implements OnInit {
   @ViewChild('map') mapEl: ElementRef;
   map: any;
-  layerURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/MapServer';
+  imageLayerURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/MapServer';
+  vectorsLayerBaseURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/FeatureServer/';
+  loadedFeatureLayers: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -26,32 +30,49 @@ export class EsriMapComponent implements OnInit {
 
     // Get the required esri classes from the route
     const esriModules = this.route.snapshot.data['esriModules'];
-    this.createMap(esriModules);
 
-    this.loadStopsLayer();
-  }
-
-  // Create a map at the root dom node of this component
-  createMap([Map]) {
-    this.map = new Map(this.mapEl.nativeElement, {
+    // Map parameters
+    const mapParameters = {
       center: [2.341483, 48.858435],
       zoom: 16,
       basemap: 'dark-gray'
-    });
+    };
+    // Feature layers parameters
+    const editableFeatureLayers = [0, 2, 4];
+    // The order of the layers loaded matters for the edition !
+    const featureLayersConfiguration: FeatureLayerConfiguration[] = [
+      { id: 17 },
+      { id: 13 },
+      { id: 15 },
+      { id: 0, options: { outFields: ['*'] } },
+      { id: 2, options: { outFields: ['*'] } },
+      { id: 4, options: { outFields: ['*'] } },
+    ]
+
+    this.createMap(esriModules, mapParameters);
+    // this.loadImageLayer();
+    this.loadFeatureLayers(featureLayersConfiguration);
+    this.setLayersEditable(editableFeatureLayers);
+  }
+
+  // Create a map at the root dom node of this component
+  createMap([Map], mapParameters: MapParameters) {
+    this.map = new Map(this.mapEl.nativeElement, mapParameters);
   }
 
   // Loads the ArcGISDynamicMapServiceLayer and injects data from this service
-  loadStopsLayer() {
+  loadImageLayer() {
     this.esriLoader.loadModules(['esri/layers/ArcGISDynamicMapServiceLayer'])
       .then(([ArcGISDynamicMapServiceLayer]) => {
-        const stopsLayer = new ArcGISDynamicMapServiceLayer(this.layerURL);
-        this.map.addLayer(stopsLayer);
-        this.configureLayerInteractions();
+        const dynamicLayer = new ArcGISDynamicMapServiceLayer(this.imageLayerURL);
+
+        this.map.addLayer(dynamicLayer);
+        // this.configureLayerInteractions(this.imageLayerURL);
       });
   }
 
   // Sets the behavior when the user interacts with the layer
-  configureLayerInteractions() {
+  configureLayerInteractions(layerURL: string) {
     this.esriLoader.loadModules([
       'esri/InfoTemplate',
       'esri/tasks/IdentifyTask',
@@ -68,7 +89,7 @@ export class EsriMapComponent implements OnInit {
         // const popup = new Popup('toto');
 
         // create identify tasks and setup parameters
-        const identifyTask = new IdentifyTask(this.layerURL);
+        const identifyTask = new IdentifyTask(layerURL);
 
         const identifyParams = new IdentifyParameters();
         identifyParams.tolerance = 3;
@@ -93,7 +114,7 @@ export class EsriMapComponent implements OnInit {
                 const layerName = result.layerName;
 
                 feature.attributes.layerName = layerName;
-                const infoTemplateTest = new InfoTemplate('', 'toto');
+                const infoTemplateTest = new InfoTemplate('', 'test');
                 feature.setInfoTemplate(infoTemplateTest);
 
                 return feature;
@@ -107,6 +128,72 @@ export class EsriMapComponent implements OnInit {
           // array of features.
           this.map.infoWindow.setFeatures([deferred]);
           this.map.infoWindow.show(event.mapPoint);
+        });
+      });
+  }
+
+  // Load the physical points from the feature layers
+  loadFeatureLayers(layersConfiguration: FeatureLayerConfiguration[]) {
+    this.esriLoader.loadModules(['esri/layers/FeatureLayer'])
+      .then(([FeatureLayer]) => {
+        // Create the corresponding FeatureLayers
+        const featureLayersToLoad = [];
+        layersConfiguration.forEach(layerConf => {
+          featureLayersToLoad.push(new FeatureLayer(this.vectorsLayerBaseURL + layerConf.id, layerConf.options));
+        });
+        // Add them to the map
+        this.map.addLayers(featureLayersToLoad);
+        this.loadedFeatureLayers = featureLayersToLoad;
+        console.log('Feature layers loaded => ', featureLayersToLoad.length);
+      });
+  }
+
+  /**
+   * Set the wanted feature layers editable
+   * @param layerIds IDs of layers to set editable
+   */
+  setLayersEditable(layerIds: number[]) {
+    this.esriLoader.loadModules([
+      'esri/toolbars/edit',
+      'esri/tasks/query',
+      'dojo/_base/event',
+      'dijit/layout/BorderContainer',
+      'dijit/layout/ContentPane',
+    ])
+      .then(([
+        Edit,
+        Query,
+        event
+      ]) => {
+        const featureLayersToSetEditable = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
+        featureLayersToSetEditable.forEach(featureLayer => {
+          // Set feature layer editable
+          const editToolbar = new Edit(this.map);
+
+          // Edition ON
+          let editingEnabled = false;
+          featureLayer.on('dbl-click', (clickEvent) => {
+            event.stop(clickEvent);
+            if (editingEnabled) {
+              editingEnabled = false;
+              editToolbar.deactivate();
+              featureLayer.clearSelection();
+            } else {
+              editingEnabled = true;
+              editToolbar.activate(Edit.MOVE, clickEvent.graphic);
+              // select the feature to prevent it from being updated by map navigation
+              const query = new Query();
+              query.objectIds = [clickEvent.graphic.attributes[featureLayer.objectIdField]];
+              featureLayer.selectFeatures(query);
+            }
+          });
+
+          // Edition OFF
+          editToolbar.on('deactivate', (deactivateEvent) => {
+            if (deactivateEvent.info.isModified) {
+              featureLayer.applyEdits(null, [deactivateEvent.graphic], null);
+            }
+          });
         });
       });
   }
