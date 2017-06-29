@@ -51,8 +51,58 @@ export class EsriMapComponent implements OnInit {
 
     this.createMap(esriModules, mapParameters);
     // this.loadImageLayer();
+    // this.createCircle();
     this.loadFeatureLayers(featureLayersConfiguration);
     this.setLayersEditable(editableFeatureLayers);
+  }
+
+  createCircle() {
+    this.esriLoader.loadModules([
+      'esri/graphic',
+      'esri/geometry/Point',
+      'esri/geometry/Circle',
+      'esri/symbols/SimpleFillSymbol',
+      'esri/layers/GraphicsLayer',
+    ])
+      .then(([
+        Graphic,
+        Point,
+        Circle,
+        SimpleFillSymbol,
+        GraphicsLayer,
+      ]) => {
+        // Create gl layer
+        const symbol = new SimpleFillSymbol().setColor(null).outline.setColor('blue');
+        const gl = new GraphicsLayer({ id: 'circles' });
+        this.map.addLayer(gl);
+
+        this.map.on('click', (e) => {
+          const radius = this.map.extent.getWidth() / 10;
+
+          // DOESN'T WORK BUT NO ERROR
+          // const circle = new Circle([260062, 6250938], {
+          //   radius: radius
+          // });
+
+          // WORKS
+          const point = new Point(260062, 6250938, this.map.spatialReference);
+          const circle = new Circle({
+            center: point,
+            radius: radius
+          });
+
+          // WORKS
+          // const circle = new Circle({
+          //   center: e.mapPoint,
+          //   // geodesic: domAttr.get(geodesic, "checked"),
+          //   radius: radius
+          // });
+          const graphic = new Graphic(circle, symbol);
+          console.log(graphic);
+          gl.add(graphic);
+
+        });
+      });
   }
 
   // Create a map at the root dom node of this component
@@ -154,13 +204,21 @@ export class EsriMapComponent implements OnInit {
    */
   setLayersEditable(layerIds: number[]) {
     this.esriLoader.loadModules([
+      'esri/graphic',
+      'esri/geometry/Point',
+      'esri/geometry/Circle',
+      'esri/symbols/SimpleFillSymbol',
+      'esri/layers/GraphicsLayer',
       'esri/toolbars/edit',
       'esri/tasks/query',
       'dojo/_base/event',
-      'dijit/layout/BorderContainer',
-      'dijit/layout/ContentPane',
     ])
       .then(([
+        Graphic,
+        Point,
+        Circle,
+        SimpleFillSymbol,
+        GraphicsLayer,
         Edit,
         Query,
         event
@@ -193,8 +251,24 @@ export class EsriMapComponent implements OnInit {
             if (deactivateEvent.info.isModified) {
               featureLayer.applyEdits(null, [deactivateEvent.graphic], null);
             }
+
+            // Test create new circle on end edition
+            const radius = this.map.extent.getWidth() / 10;
+            const symbol = new SimpleFillSymbol().setColor(null).outline.setColor('blue');
+            const point =
+              new Point(deactivateEvent.graphic.geometry.x, deactivateEvent.graphic.geometry.y, this.map.spatialReference);
+            const circle = new Circle({
+              center: point,
+              radius: radius
+            });
+            const graphic = new Graphic(circle, symbol);
+
+            featureLayer.add(graphic);
+            // Doesn't save anything
+            featureLayer.applyEdits(graphic);
           });
         });
-      });
+      })
+      .catch(error => console.error(error));
   }
 }
