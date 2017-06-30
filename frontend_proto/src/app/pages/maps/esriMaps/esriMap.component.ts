@@ -48,9 +48,10 @@ export class EsriMapComponent implements OnInit {
       // { id: 13 },
       // { id: 15 },
       { id: 0, options: { outFields: ['*'] } },
-      // { id: 2, options: { outFields: ['*'] } },
-      // { id: 4, options: { outFields: ['*'] } },
+      { id: 2, options: { outFields: ['*'] } },
+      { id: 4, options: { outFields: ['*'] } },
     ]
+    const featureLayersToBufferize = [0];
 
     this.createMap(esriModules, mapParameters);
     this.initGeometryService();
@@ -58,7 +59,7 @@ export class EsriMapComponent implements OnInit {
     // this.loadImageLayer();
     this.loadFeatureLayers(featureLayersConfiguration);
     this.setLayersEditable(editableFeatureLayers);
-    this.initBufferMassSelection(editableFeatureLayers);
+    this.initBufferMassSelection(featureLayersToBufferize);
   }
 
   // Create a map at the root dom node of this component
@@ -346,8 +347,7 @@ export class EsriMapComponent implements OnInit {
         SimpleFillSymbol,
         Graphic
       ]) => {
-        const featureLayersToSetEditable = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
-        const testLayer = featureLayersToSetEditable[0];
+        const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
 
         // Set infoWindow Size
         this.map.infoWindow.resize(175, 100);
@@ -361,36 +361,42 @@ export class EsriMapComponent implements OnInit {
           const query = new Query();
           query.geometry = RectangularSelectorGeometry.geometry;
 
-          testLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, (features) => {
-            // calculate the convex hull
-            const points = features.map((feature) => {
-              return feature.geometry;
-            });
+          featureLayersConcerned.forEach(featureLayer => {
 
-            // Apply Buffer on points
-            const bufferParams = new BufferParameters();
-            bufferParams.outSpatialReference = this.map.spatialReference;
-            bufferParams.unit = 9036;  // kilometers
-            bufferParams.distances = [0.1];  // 100 m
-            bufferParams.geometries = points;
-            bufferParams.unionResults = true;
+            featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, (features) => {
+              // calculate the convex hull
+              const points = features.map((feature) => {
+                return feature.geometry;
+              });
 
-            this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
-              const symbol = new SimpleFillSymbol(
-                SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(
-                  SimpleLineSymbol.STYLE_SOLID,
-                  new Color([255, 0, 0, 0.65]), 2
-                ),
-                new Color([255, 0, 0, 0.35])
-              );
+              // Apply Buffer on points
+              const bufferParams = new BufferParameters();
+              bufferParams.outSpatialReference = this.map.spatialReference;
+              bufferParams.unit = 9036;  // kilometers
+              bufferParams.distances = [0.1];  // 100 m
+              bufferParams.geometries = points;
+              bufferParams.unionResults = true;
 
-              bufferedGeometries.forEach(bufferedGeometry => {
-                const graphic = new Graphic(bufferedGeometry, symbol);
-                this.map.graphics.add(graphic);
+              this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
+                const symbol = new SimpleFillSymbol(
+                  SimpleFillSymbol.STYLE_SOLID,
+                  new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_SOLID,
+                    new Color([255, 0, 0, 0.65]), 2
+                  ),
+                  new Color([255, 0, 0, 0.35])
+                );
+
+                bufferedGeometries.forEach(bufferedGeometry => {
+                  const graphic = new Graphic(bufferedGeometry, symbol);
+                  this.map.graphics.add(graphic);
+                });
               });
             });
+
+
           });
+
         });
       });
   }
