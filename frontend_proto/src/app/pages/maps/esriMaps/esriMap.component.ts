@@ -369,34 +369,33 @@ export class EsriMapComponent implements OnInit {
                 return feature.geometry;
               });
 
-              // Apply Buffer on points
-              const bufferParams = new BufferParameters();
-              bufferParams.outSpatialReference = this.map.spatialReference;
-              bufferParams.unit = 9036;  // kilometers
-              bufferParams.distances = [0.1];  // 100 m
-              bufferParams.geometries = points;
-              bufferParams.unionResults = true;
+              if (points.length > 0) {
+                // Apply Buffer on points
+                const bufferParams = new BufferParameters();
+                bufferParams.outSpatialReference = this.map.spatialReference;
+                bufferParams.unit = 9036;  // kilometers
+                bufferParams.distances = [0.1];  // 100 m
+                bufferParams.geometries = points;
+                bufferParams.unionResults = true;
 
-              this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
-                const symbol = new SimpleFillSymbol(
-                  SimpleFillSymbol.STYLE_SOLID,
-                  new SimpleLineSymbol(
-                    SimpleLineSymbol.STYLE_SOLID,
-                    new Color([255, 0, 0, 0.65]), 2
-                  ),
-                  new Color([255, 0, 0, 0.35])
-                );
+                this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
+                  const symbol = new SimpleFillSymbol(
+                    SimpleFillSymbol.STYLE_SOLID,
+                    new SimpleLineSymbol(
+                      SimpleLineSymbol.STYLE_SOLID,
+                      new Color([255, 0, 0, 0.65]), 2
+                    ),
+                    new Color([255, 0, 0, 0.35])
+                  );
 
-                bufferedGeometries.forEach(bufferedGeometry => {
-                  const graphic = new Graphic(bufferedGeometry, symbol);
-                  this.map.graphics.add(graphic);
+                  bufferedGeometries.forEach(bufferedGeometry => {
+                    const graphic = new Graphic(bufferedGeometry, symbol);
+                    this.map.graphics.add(graphic);
+                  });
                 });
-              });
+              }
             });
-
-
           });
-
         });
       });
   }
