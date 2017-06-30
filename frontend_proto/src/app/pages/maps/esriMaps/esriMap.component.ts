@@ -13,11 +13,15 @@ import { MapParameters, FeatureLayerConfiguration } from './esriMap.interface';
 export class EsriMapComponent implements OnInit {
   @ViewChild('map') mapEl: ElementRef;
   map: any;
-  imageLayerURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/MapServer';
-  vectorsLayerBaseURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/FeatureServer/';
+  baseURL = {
+    mapToponymesURL: 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/toponymes/MapServer',
+    mapViaNavigoURL: 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/ViaNavigo/MapServer',
+    imageLayerURL: 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/MapServer',
+    vectorsLayerBaseURL: 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/FeatureServer/',
+    geometryServiceURL: 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/Utilities/Geometry/GeometryServer',
+  }
   loadedFeatureLayers: any[] = [];
   geometryService = null;
-  geometryServiceURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/Utilities/Geometry/GeometryServer';
   drawToolbar: any = null;
 
   constructor(
@@ -36,9 +40,8 @@ export class EsriMapComponent implements OnInit {
 
     // Map parameters
     const mapParameters = {
-      center: [2.341483, 48.858435],
-      zoom: 17,
-      basemap: 'dark-gray'
+      // center: [4, 4],
+      zoom: 6,
     };
     // Feature layers parameters
     const editableFeatureLayers = [0, 2, 4];
@@ -56,10 +59,11 @@ export class EsriMapComponent implements OnInit {
     this.createMap(esriModules, mapParameters);
     this.initGeometryService();
     this.initDrawToolbar();
+    this.initCustomBaseMap();
     // this.loadImageLayer();
     this.loadFeatureLayers(featureLayersConfiguration);
     this.setLayersEditable(editableFeatureLayers);
-    this.initBufferMassSelection(featureLayersToBufferize);
+    this.bufferMassSelection(featureLayersToBufferize);
   }
 
   // Create a map at the root dom node of this component
@@ -67,6 +71,7 @@ export class EsriMapComponent implements OnInit {
     this.map = new Map(this.mapEl.nativeElement, mapParameters);
   }
 
+  // Sets the geometryService instance to call methods from the REST API
   initGeometryService() {
     this.esriLoader.loadModules([
       'esri/tasks/GeometryService'
@@ -74,7 +79,7 @@ export class EsriMapComponent implements OnInit {
       .then(([
         GeometryService
       ]) => {
-        this.geometryService = new GeometryService(this.geometryServiceURL);
+        this.geometryService = new GeometryService(this.baseURL.geometryServiceURL);
       });
   }
 
@@ -90,14 +95,22 @@ export class EsriMapComponent implements OnInit {
       });
   }
 
-  // Loads the ArcGISDynamicMapServiceLayer and injects data from this service
+  // Initialize the baseMap of the map
+  initCustomBaseMap() {
+    this.esriLoader.loadModules(['esri/layers/ArcGISTiledMapServiceLayer'])
+      .then(([ArcGISTiledMapServiceLayer]) => {
+        const tiledLayer = new ArcGISTiledMapServiceLayer(this.baseURL.mapViaNavigoURL);
+        this.map.addLayer(tiledLayer);
+      });
+  }
+
+  // Loads the image containing all the layers for a fast display
   loadImageLayer() {
     this.esriLoader.loadModules(['esri/layers/ArcGISDynamicMapServiceLayer'])
       .then(([ArcGISDynamicMapServiceLayer]) => {
-        const dynamicLayer = new ArcGISDynamicMapServiceLayer(this.imageLayerURL);
-
+        const dynamicLayer = new ArcGISDynamicMapServiceLayer(this.baseURL.imageLayerURL);
         this.map.addLayer(dynamicLayer);
-        // this.configureLayerInteractions(this.imageLayerURL);
+        // this.configureLayerInteractions(this.baseURL.imageLayerURL);
       });
   }
 
@@ -169,7 +182,7 @@ export class EsriMapComponent implements OnInit {
         // Create the corresponding FeatureLayers
         const featureLayersToLoad = [];
         layersConfiguration.forEach(layerConf => {
-          featureLayersToLoad.push(new FeatureLayer(this.vectorsLayerBaseURL + layerConf.id, layerConf.options));
+          featureLayersToLoad.push(new FeatureLayer(this.baseURL.vectorsLayerBaseURL + layerConf.id, layerConf.options));
         });
         // Add them to the map
         this.map.addLayers(featureLayersToLoad);
@@ -287,6 +300,8 @@ export class EsriMapComponent implements OnInit {
         SimpleFillSymbol,
         Graphic
       ]) => {
+        console.log(centerPoint);
+
         // Set the buffer parameters
         const bufferParams = new BufferParameters();
         bufferParams.outSpatialReference = this.map.spatialReference;
@@ -312,24 +327,12 @@ export class EsriMapComponent implements OnInit {
       });
   }
 
-  // Activates the draw edition
-  activateToolbar(): void {
-    this.esriLoader.loadModules([
-      'esri/toolbars/draw'
-    ])
-      .then(([
-        Draw
-      ]) => {
-        this.drawToolbar.activate(Draw.EXTENT);
-      });
-  }
-
-  initBufferMassSelection(layerIds: number[]) {
+  // Manages the drawing tool to create buffer around a query selection
+  bufferMassSelection(layerIds: number[]) {
     this.esriLoader.loadModules([
       'esri/toolbars/draw',
       'esri/tasks/query',
       'esri/layers/FeatureLayer',
-
       'esri/tasks/BufferParameters',
       'esri/Color',
       'esri/symbols/SimpleLineSymbol',
@@ -340,7 +343,6 @@ export class EsriMapComponent implements OnInit {
         Draw,
         Query,
         FeatureLayer,
-
         BufferParameters,
         Color,
         SimpleLineSymbol,
@@ -348,21 +350,16 @@ export class EsriMapComponent implements OnInit {
         Graphic
       ]) => {
         const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
-
-        // Set infoWindow Size
-        this.map.infoWindow.resize(175, 100);
-
         // Get the Toolbar instance
         this.drawToolbar.on('draw-complete', (RectangularSelectorGeometry) => {
-
           this.drawToolbar.deactivate();
 
           // Select the points within the extent
           const query = new Query();
           query.geometry = RectangularSelectorGeometry.geometry;
 
+          // Manage the actions for each configured layer
           featureLayersConcerned.forEach(featureLayer => {
-
             featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, (features) => {
               // calculate the convex hull
               const points = features.map((feature) => {
@@ -397,6 +394,18 @@ export class EsriMapComponent implements OnInit {
             });
           });
         });
+      });
+  }
+
+  // Activates the draw edition
+  activateToolbar(): void {
+    this.esriLoader.loadModules([
+      'esri/toolbars/draw'
+    ])
+      .then(([
+        Draw
+      ]) => {
+        this.drawToolbar.activate(Draw.EXTENT);
       });
   }
 }
