@@ -7,3 +7,24 @@ Sur la machine reflex-app, exporter le display
 export DISPLAY=<ip machine>:0.0
 code &
 ```
+
+## outils de build
+
+- npm
+- yarn
+- yeoman
+- Webpack
+- Grunt
+- Gulp
+- Browserify
+- angular-cli
+
+## Framework
+
+- Angular + typescript
+
+[Build Tools: état de l'art](http://stateofjs.com/2016/buildtools/)
+
+## Normes de standards
+
+ ES6 compiler
