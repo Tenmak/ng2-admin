@@ -16,6 +16,9 @@ export class EsriMapComponent implements OnInit {
   imageLayerURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/MapServer';
   vectorsLayerBaseURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/REFLEX_OM_FA/FeatureServer/';
   loadedFeatureLayers: any[] = [];
+  geometryService = null;
+  geometryServiceURL = 'https://reflex-crt.akka.eu:6443/arcgis/rest/services/Utilities/Geometry/GeometryServer';
+  drawToolbar: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,80 +37,56 @@ export class EsriMapComponent implements OnInit {
     // Map parameters
     const mapParameters = {
       center: [2.341483, 48.858435],
-      zoom: 16,
+      zoom: 17,
       basemap: 'dark-gray'
     };
     // Feature layers parameters
     const editableFeatureLayers = [0, 2, 4];
     // The order of the layers loaded matters for the edition !
     const featureLayersConfiguration: FeatureLayerConfiguration[] = [
-      { id: 17 },
-      { id: 13 },
-      { id: 15 },
+      // { id: 17 },
+      // { id: 13 },
+      // { id: 15 },
       { id: 0, options: { outFields: ['*'] } },
-      { id: 2, options: { outFields: ['*'] } },
-      { id: 4, options: { outFields: ['*'] } },
+      // { id: 2, options: { outFields: ['*'] } },
+      // { id: 4, options: { outFields: ['*'] } },
     ]
 
     this.createMap(esriModules, mapParameters);
+    this.initGeometryService();
+    this.initDrawToolbar();
     // this.loadImageLayer();
-    // this.createCircle();
     this.loadFeatureLayers(featureLayersConfiguration);
     this.setLayersEditable(editableFeatureLayers);
-  }
-
-  createCircle() {
-    this.esriLoader.loadModules([
-      'esri/graphic',
-      'esri/geometry/Point',
-      'esri/geometry/Circle',
-      'esri/symbols/SimpleFillSymbol',
-      'esri/layers/GraphicsLayer',
-    ])
-      .then(([
-        Graphic,
-        Point,
-        Circle,
-        SimpleFillSymbol,
-        GraphicsLayer,
-      ]) => {
-        // Create gl layer
-        const symbol = new SimpleFillSymbol().setColor(null).outline.setColor('blue');
-        const gl = new GraphicsLayer({ id: 'circles' });
-        this.map.addLayer(gl);
-
-        this.map.on('click', (e) => {
-          const radius = this.map.extent.getWidth() / 10;
-
-          // DOESN'T WORK BUT NO ERROR
-          // const circle = new Circle([260062, 6250938], {
-          //   radius: radius
-          // });
-
-          // WORKS
-          const point = new Point(260062, 6250938, this.map.spatialReference);
-          const circle = new Circle({
-            center: point,
-            radius: radius
-          });
-
-          // WORKS
-          // const circle = new Circle({
-          //   center: e.mapPoint,
-          //   // geodesic: domAttr.get(geodesic, "checked"),
-          //   radius: radius
-          // });
-          const graphic = new Graphic(circle, symbol);
-          console.log(graphic);
-          gl.add(graphic);
-
-        });
-      });
+    this.initBufferMassSelection(editableFeatureLayers);
   }
 
   // Create a map at the root dom node of this component
   createMap([Map], mapParameters: MapParameters) {
     this.map = new Map(this.mapEl.nativeElement, mapParameters);
+  }
+
+  initGeometryService() {
+    this.esriLoader.loadModules([
+      'esri/tasks/GeometryService'
+    ])
+      .then(([
+        GeometryService
+      ]) => {
+        this.geometryService = new GeometryService(this.geometryServiceURL);
+      });
+  }
+
+  // Initialize the draw edition
+  initDrawToolbar() {
+    this.esriLoader.loadModules([
+      'esri/toolbars/draw'
+    ])
+      .then(([
+        Draw
+      ]) => {
+        this.drawToolbar = new Draw(this.map);
+      });
   }
 
   // Loads the ArcGISDynamicMapServiceLayer and injects data from this service
@@ -204,21 +183,11 @@ export class EsriMapComponent implements OnInit {
    */
   setLayersEditable(layerIds: number[]) {
     this.esriLoader.loadModules([
-      'esri/graphic',
-      'esri/geometry/Point',
-      'esri/geometry/Circle',
-      'esri/symbols/SimpleFillSymbol',
-      'esri/layers/GraphicsLayer',
       'esri/toolbars/edit',
       'esri/tasks/query',
       'dojo/_base/event',
     ])
       .then(([
-        Graphic,
-        Point,
-        Circle,
-        SimpleFillSymbol,
-        GraphicsLayer,
         Edit,
         Query,
         event
@@ -235,13 +204,16 @@ export class EsriMapComponent implements OnInit {
             if (editingEnabled) {
               editingEnabled = false;
               editToolbar.deactivate();
+              this.map.enableDoubleClickZoom();
               featureLayer.clearSelection();
             } else {
               editingEnabled = true;
+              this.map.disableDoubleClickZoom();
               editToolbar.activate(Edit.MOVE, clickEvent.graphic);
               // select the feature to prevent it from being updated by map navigation
               const query = new Query();
-              query.objectIds = [clickEvent.graphic.attributes[featureLayer.objectIdField]];
+              // TODO : investigate this ???
+              // query.objectIds = [clickEvent.graphic.attributes[featureLayer.objectIdField]];
               featureLayer.selectFeatures(query);
             }
           });
@@ -252,23 +224,174 @@ export class EsriMapComponent implements OnInit {
               featureLayer.applyEdits(null, [deactivateEvent.graphic], null);
             }
 
-            // Test create new circle on end edition
-            const radius = this.map.extent.getWidth() / 10;
-            const symbol = new SimpleFillSymbol().setColor(null).outline.setColor('blue');
-            const point =
-              new Point(deactivateEvent.graphic.geometry.x, deactivateEvent.graphic.geometry.y, this.map.spatialReference);
-            const circle = new Circle({
-              center: point,
-              radius: radius
-            });
-            const graphic = new Graphic(circle, symbol);
+            // Buffer on single point
+            this.bufferSinglePoint(deactivateEvent.graphic);
 
-            featureLayer.add(graphic);
+            // Creates a circle on end edition
+            // this.createCircle(deactivateEvent.graphic).then((graphic: any) => {
+            //   featureLayer.add(graphic);
+            // });
+
             // Doesn't save anything
-            featureLayer.applyEdits(graphic);
+            // featureLayer.applyEdits(graphic);
           });
         });
       })
       .catch(error => console.error(error));
+  }
+
+  // Creates a manual circle around a single point
+  createCircle(centerPoint: any) {
+    return this.esriLoader.loadModules([
+      'esri/graphic',
+      'esri/geometry/Point',
+      'esri/geometry/Circle',
+      'esri/symbols/SimpleFillSymbol',
+    ])
+      .then(([
+        Graphic,
+        Point,
+        Circle,
+        SimpleFillSymbol
+      ]) => {
+        // Create new circle on end edition
+        const radius = 70;
+        const symbol = new SimpleFillSymbol().setColor(null).outline.setColor('blue');
+        // Create Point + Circle
+        const point =
+          new Point(centerPoint.geometry.x, centerPoint.geometry.y, this.map.spatialReference);
+        const circle = new Circle({
+          center: point,
+          radius: radius
+        });
+        // Creates the graphic element
+        const graphic = new Graphic(circle, symbol);
+        return graphic;
+      });
+  }
+
+  // Calls the buffer service to create a circle around a single point
+  bufferSinglePoint(centerPoint: any) {
+    this.esriLoader.loadModules([
+      'esri/tasks/BufferParameters',
+      'esri/Color',
+      'esri/symbols/SimpleLineSymbol',
+      'esri/symbols/SimpleFillSymbol',
+      'esri/graphic'
+    ])
+      .then(([
+        BufferParameters,
+        Color,
+        SimpleLineSymbol,
+        SimpleFillSymbol,
+        Graphic
+      ]) => {
+        // Set the buffer parameters
+        const bufferParams = new BufferParameters();
+        bufferParams.outSpatialReference = this.map.spatialReference;
+        bufferParams.unit = 9036;  // kilometers
+        bufferParams.distances = [0.1];  // 100 m
+        bufferParams.geometries = [centerPoint.geometry];
+
+        this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
+          const symbol = new SimpleFillSymbol(
+            SimpleFillSymbol.STYLE_SOLID,
+            new SimpleLineSymbol(
+              SimpleLineSymbol.STYLE_SOLID,
+              new Color([255, 0, 0, 0.65]), 2
+            ),
+            new Color([255, 0, 0, 0.35])
+          );
+
+          bufferedGeometries.forEach(geometry => {
+            const graphic = new Graphic(geometry, symbol);
+            this.map.graphics.add(graphic);
+          });
+        });
+      });
+  }
+
+  // Activates the draw edition
+  activateToolbar(): void {
+    this.esriLoader.loadModules([
+      'esri/toolbars/draw'
+    ])
+      .then(([
+        Draw
+      ]) => {
+        this.drawToolbar.activate(Draw.EXTENT);
+      });
+  }
+
+  initBufferMassSelection(layerIds: number[]) {
+    this.esriLoader.loadModules([
+      'esri/toolbars/draw',
+      'esri/tasks/query',
+      'esri/layers/FeatureLayer',
+
+      'esri/tasks/BufferParameters',
+      'esri/Color',
+      'esri/symbols/SimpleLineSymbol',
+      'esri/symbols/SimpleFillSymbol',
+      'esri/graphic'
+    ])
+      .then(([
+        Draw,
+        Query,
+        FeatureLayer,
+
+        BufferParameters,
+        Color,
+        SimpleLineSymbol,
+        SimpleFillSymbol,
+        Graphic
+      ]) => {
+        const featureLayersToSetEditable = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
+        const testLayer = featureLayersToSetEditable[0];
+
+        // Set infoWindow Size
+        this.map.infoWindow.resize(175, 100);
+
+        // Get the Toolbar instance
+        this.drawToolbar.on('draw-complete', (RectangularSelectorGeometry) => {
+
+          this.drawToolbar.deactivate();
+
+          // Select the points within the extent
+          const query = new Query();
+          query.geometry = RectangularSelectorGeometry.geometry;
+
+          testLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, (features) => {
+            // calculate the convex hull
+            const points = features.map((feature) => {
+              return feature.geometry;
+            });
+
+            // Apply Buffer on points
+            const bufferParams = new BufferParameters();
+            bufferParams.outSpatialReference = this.map.spatialReference;
+            bufferParams.unit = 9036;  // kilometers
+            bufferParams.distances = [0.1];  // 100 m
+            bufferParams.geometries = points;
+            bufferParams.unionResults = true;
+
+            this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
+              const symbol = new SimpleFillSymbol(
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(
+                  SimpleLineSymbol.STYLE_SOLID,
+                  new Color([255, 0, 0, 0.65]), 2
+                ),
+                new Color([255, 0, 0, 0.35])
+              );
+
+              bufferedGeometries.forEach(bufferedGeometry => {
+                const graphic = new Graphic(bufferedGeometry, symbol);
+                this.map.graphics.add(graphic);
+              });
+            });
+          });
+        });
+      });
   }
 }
