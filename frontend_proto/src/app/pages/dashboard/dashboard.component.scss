@@ -21,3 +21,14 @@
 .blurCalendar {
   height: 475px;
 }
+
+/deep/ .tab-content {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+ /deep/ .card > .card-body {
+  padding: 0px;
+}

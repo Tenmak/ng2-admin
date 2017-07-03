@@ -123,41 +123,41 @@
   }
 }
 
-.nav.nav-tabs {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom: 1px solid transparent;
-  background-color: $primary-light;
-  a {
-    color: $label-text;
-    &:hover {
-      color: $label-text;
-    }
-  }
-  & > li > a {
-    margin-right: 0;
-    margin-bottom: 0;
-    border-radius: 0;
-    border: none;
-    &:hover {
-      border: none;
-      background-color: $primary-light;
-    }
-  }
-  & > li.active > a {
-    color: $label-text;
-    background-color: $primary;
-  }
-  > li:first-of-type a {
-    border-top-left-radius: 5px;
-  }
-  .dropdown-menu > li > a {
-    color: $dropdown-text;
-    &:hover {
-      color: $dropdown-text;
-    }
-  }
-}
+// .nav.nav-tabs {
+//   border-top-left-radius: 5px;
+//   border-top-right-radius: 5px;
+//   border-bottom: 1px solid transparent;
+//   background-color: $primary-light;
+//   a {
+//     color: $label-text;
+//     &:hover {
+//       color: $label-text;
+//     }
+//   }
+//   & > li > a {
+//     margin-right: 0;
+//     margin-bottom: 0;
+//     border-radius: 0;
+//     border: none;
+//     &:hover {
+//       border: none;
+//       background-color: $primary-light;
+//     }
+//   }
+//   & > li.active > a {
+//     color: $label-text;
+//     background-color: $primary;
+//   }
+//   > li:first-of-type a {
+//     border-top-left-radius: 5px;
+//   }
+//   .dropdown-menu > li > a {
+//     color: $dropdown-text;
+//     &:hover {
+//       color: $dropdown-text;
+//     }
+//   }
+// }
 
 .blur {
   .nav.nav-tabs {

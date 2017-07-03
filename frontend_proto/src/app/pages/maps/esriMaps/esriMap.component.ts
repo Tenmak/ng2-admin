@@ -300,8 +300,6 @@ export class EsriMapComponent implements OnInit {
         SimpleFillSymbol,
         Graphic
       ]) => {
-        console.log(centerPoint);
-
         // Set the buffer parameters
         const bufferParams = new BufferParameters();
         bufferParams.outSpatialReference = this.map.spatialReference;

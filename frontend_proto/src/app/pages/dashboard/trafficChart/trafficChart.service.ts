@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaThemeConfigProvider, colorHelper } from '../../../theme';
+import { BaThemeConfigProvider, ColorHelper } from '../../../theme';
 
 @Injectable()
 export class TrafficChartService {
@@ -9,42 +9,45 @@ export class TrafficChartService {
 
   getData() {
     const dashboardColors = this._baConfig.get().colors.dashboard;
+
+    const totalChartItems = 103168;
+
     return [
       {
-        value: 2000,
+        value: 4,
         color: dashboardColors.white,
-        highlight: colorHelper.shade(dashboardColors.white, 15),
-        label: 'Other',
-        percentage: 87,
-        order: 1,
+        highlight: ColorHelper.shade(dashboardColors.white, 15),
+        label: 'Groupe de Lieu',
+        percentage: Number(Math.round(4 / totalChartItems * 100 * 100) / 100).toFixed(2),
+        order: 0,
       }, {
-        value: 1500,
+        value: 15431,
         color: dashboardColors.gossip,
-        highlight: colorHelper.shade(dashboardColors.gossip, 15),
-        label: 'Search engines',
-        percentage: 22,
-        order: 4,
-      }, {
-        value: 1000,
-        color: dashboardColors.silverTree,
-        highlight: colorHelper.shade(dashboardColors.silverTree, 15),
-        label: 'Referral Traffic',
-        percentage: 70,
+        highlight: ColorHelper.shade(dashboardColors.gossip, 15),
+        label: 'Lieu d\'Arrêt',
+        percentage: Number(Math.round(15431 / totalChartItems * 100 * 100) / 100).toFixed(2),
         order: 3,
       }, {
-        value: 1200,
-        color: dashboardColors.surfieGreen,
-        highlight: colorHelper.shade(dashboardColors.surfieGreen, 15),
-        label: 'Direct Traffic',
-        percentage: 38,
+        value: 17465,
+        color: dashboardColors.silverTree,
+        highlight: ColorHelper.shade(dashboardColors.silverTree, 15),
+        label: 'Zone de Lieu',
+        percentage: Number(Math.round(17465 / totalChartItems * 100 * 100) / 100).toFixed(2),
         order: 2,
       }, {
-        value: 400,
+        value: 41139,
+        color: dashboardColors.surfieGreen,
+        highlight: ColorHelper.shade(dashboardColors.surfieGreen, 15),
+        label: 'Zone d\'embarquement',
+        percentage: Number(Math.round(41139 / totalChartItems * 100 * 100) / 100).toFixed(2),
+        order: 1,
+      }, {
+        value: 2129,
         color: dashboardColors.blueStone,
-        highlight: colorHelper.shade(dashboardColors.blueStone, 15),
-        label: 'Ad Campaigns',
-        percentage: 17,
-        order: 0,
+        highlight: ColorHelper.shade(dashboardColors.blueStone, 15),
+        label: 'Accès de Lieu',
+        percentage: Number(Math.round(2129 / totalChartItems * 100 * 100) / 100).toFixed(2),
+        order: 4,
       },
     ];
   }

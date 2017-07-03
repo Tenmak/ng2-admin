@@ -5,8 +5,8 @@ import * as Chart from 'chart.js';
 
 @Component({
   selector: 'reflex-traffic-chart',
-  templateUrl: './trafficChart.html',
-  styleUrls: ['./trafficChart.scss']
+  templateUrl: './trafficChart.component.html',
+  styleUrls: ['./trafficChart.component.scss']
 })
 
 // TODO: move chart.js to it's own component

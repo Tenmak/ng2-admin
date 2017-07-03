@@ -16,6 +16,16 @@
     "dashboard": {
         "acquisition_channels": "Acquisition Channels",
         "feed": "News",
+        "tabs": {
+            "title": "Indicators",
+            "tab_1": {
+                "title": "Repository",
+                "chart_title": "Repository items"
+            },
+            "tab_2": "Feeds",
+            "tab_3": "Demands",
+            "tab_4": "Identifiers"
+        },
         "actions_card": {
             "title": "Stops",
             "demands_summary": "Demands summary : ",
@@ -36,9 +46,6 @@
             "consult_details": "Consult feeds details",
             "identifiers": "Identifiers",
             "identifiers_history": "Get the history of my last identifiers"
-        },
-        "traffic_chart": {
-            "view_total": "Views Total"
         }
     }
 }

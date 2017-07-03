@@ -4,8 +4,8 @@ import { FeedService } from './feed.service';
 
 @Component({
   selector: 'reflex-feed',
-  templateUrl: './feed.html',
-  styleUrls: ['./feed.scss']
+  templateUrl: './feed.component.html',
+  styleUrls: ['./feed.component.scss']
 })
 export class FeedComponent implements OnInit {
 
