@@ -38,11 +38,6 @@ export class EsriMapComponent implements OnInit {
     // Get the required esri classes from the route
     const esriModules = this.route.snapshot.data['esriModules'];
 
-    // Map parameters
-    const mapParameters = {
-      // center: [4, 4],
-      zoom: 6,
-    };
     // Feature layers parameters
     const editableFeatureLayers = [0, 2, 4];
     // The order of the layers loaded matters for the edition !
@@ -56,19 +51,30 @@ export class EsriMapComponent implements OnInit {
     ]
     const featureLayersToBufferize = [0];
 
-    this.createMap(esriModules, mapParameters);
+    this.createMap(esriModules);
     this.initGeometryService();
     this.initDrawToolbar();
     this.initCustomBaseMap();
     // this.loadImageLayer();
-    this.loadFeatureLayers(featureLayersConfiguration);
-    this.setLayersEditable(editableFeatureLayers);
-    this.bufferMassSelection(featureLayersToBufferize);
+    this.loadFeatureLayers(featureLayersConfiguration)
+      .then((loadedFeatureLayers) => {
+        if (this.loadedFeatureLayers.length > 0) {
+          // Wait for the DOM elements to be loaded to operate
+          setTimeout(() => {
+            this.setLayersEditable(editableFeatureLayers);
+            this.bufferMassSelection(featureLayersToBufferize);
+          }, 0);
+        }
+      });
   }
 
   // Create a map at the root dom node of this component
-  createMap([Map], mapParameters: MapParameters) {
-    this.map = new Map(this.mapEl.nativeElement, mapParameters);
+  createMap([Map, Point, SpatialReference]) {
+    const options = {
+      center: new Point(652628, 6861795, new SpatialReference({ wkid: 102110 })),
+      zoom: 6,
+    };
+    this.map = new Map(this.mapEl.nativeElement, options);
   }
 
   // Sets the geometryService instance to call methods from the REST API
@@ -97,8 +103,10 @@ export class EsriMapComponent implements OnInit {
 
   // Initialize the baseMap of the map
   initCustomBaseMap() {
-    this.esriLoader.loadModules(['esri/layers/ArcGISTiledMapServiceLayer'])
-      .then(([ArcGISTiledMapServiceLayer]) => {
+    this.esriLoader.loadModules([
+      'esri/layers/ArcGISTiledMapServiceLayer'
+    ])
+      .then(([ArcGISTiledMapServiceLayer, Point, SpatRef]) => {
         const tiledLayer = new ArcGISTiledMapServiceLayer(this.baseURL.mapViaNavigoURL);
         this.map.addLayer(tiledLayer);
       });
@@ -177,7 +185,7 @@ export class EsriMapComponent implements OnInit {
 
   // Load the physical points from the feature layers
   loadFeatureLayers(layersConfiguration: FeatureLayerConfiguration[]) {
-    this.esriLoader.loadModules(['esri/layers/FeatureLayer'])
+    return this.esriLoader.loadModules(['esri/layers/FeatureLayer'])
       .then(([FeatureLayer]) => {
         // Create the corresponding FeatureLayers
         const featureLayersToLoad = [];
@@ -186,8 +194,7 @@ export class EsriMapComponent implements OnInit {
         });
         // Add them to the map
         this.map.addLayers(featureLayersToLoad);
-        this.loadedFeatureLayers = featureLayersToLoad;
-        console.log('Feature layers loaded => ', featureLayersToLoad.length);
+        return this.loadedFeatureLayers = featureLayersToLoad;
       });
   }
 
@@ -207,6 +214,9 @@ export class EsriMapComponent implements OnInit {
         event
       ]) => {
         const featureLayersToSetEditable = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
+        if (featureLayersToSetEditable.length === 0) {
+          console.error('Couldn\'t get feature layers on time !');
+        }
         featureLayersToSetEditable.forEach(featureLayer => {
           // Set feature layer editable
           const editToolbar = new Edit(this.map);
@@ -250,8 +260,7 @@ export class EsriMapComponent implements OnInit {
             // featureLayer.applyEdits(graphic);
           });
         });
-      })
-      .catch(error => console.error(error));
+      });
   }
 
   // Creates a manual circle around a single point
@@ -348,6 +357,10 @@ export class EsriMapComponent implements OnInit {
         Graphic
       ]) => {
         const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
+        if (featureLayersConcerned.length === 0) {
+          console.error('Couldn\'t get feature layers on time !');
+        }
+
         // Get the Toolbar instance
         this.drawToolbar.on('draw-complete', (RectangularSelectorGeometry) => {
           this.drawToolbar.deactivate();

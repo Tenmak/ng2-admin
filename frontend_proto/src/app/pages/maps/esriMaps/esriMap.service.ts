@@ -16,7 +16,11 @@ export class EsriMapResolveService implements Resolve<any> {
     }).then(() => {
       // load the map class needed to create a new map
       // and make it available in the route's data
-      return this.esriLoader.loadModules(['esri/map']);
+      return this.esriLoader.loadModules([
+        'esri/map',
+        'esri/geometry/Point',
+        'esri/SpatialReference'
+      ]);
     });
   }
 }
