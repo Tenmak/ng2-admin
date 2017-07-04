@@ -49,7 +49,7 @@ export class EsriMapComponent implements OnInit {
       { id: 2, options: { outFields: ['*'] } },
       { id: 4, options: { outFields: ['*'] } },
     ]
-    const featureLayersToBufferize = [0];
+    const featureLayersToBufferize = [0, 2];
 
     this.createMap(esriModules);
     this.initGeometryService();
@@ -215,7 +215,10 @@ export class EsriMapComponent implements OnInit {
       ]) => {
         const featureLayersToSetEditable = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
         if (featureLayersToSetEditable.length === 0) {
-          console.error('Couldn\'t get feature layers on time !');
+          console.error('failed to initialize editable layers : retrying...');
+          setTimeout(() => {
+            return this.setLayersEditable(layerIds);
+          }, 0);
         }
         featureLayersToSetEditable.forEach(featureLayer => {
           // Set feature layer editable
@@ -358,7 +361,10 @@ export class EsriMapComponent implements OnInit {
       ]) => {
         const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
         if (featureLayersConcerned.length === 0) {
-          console.error('Couldn\'t get feature layers on time !');
+          console.error('failed to bind the drawing tool to the feature layers : retrying...');
+          setTimeout(() => {
+            return this.bufferMassSelection(layerIds);
+          }, 0);
         }
 
         // Get the Toolbar instance
