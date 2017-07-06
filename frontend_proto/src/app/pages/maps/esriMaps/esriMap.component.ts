@@ -49,7 +49,7 @@ export class EsriMapComponent implements OnInit {
       { id: 2, options: { outFields: ['*'] } },
       { id: 4, options: { outFields: ['*'] } },
     ]
-    const featureLayersToBufferize = [0, 2];
+    const featureLayersToBufferize = [0];
 
     this.createMap(esriModules);
     this.initGeometryService();
