@@ -52,17 +52,13 @@ export class ProfileComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
 
   constructor(
-    protected profileService: ProfileService
-  ) {
-    // this.service.getData().then(
-    //   (data) => {
-    //     this.source.load(data);
-    //   });
-  }
+    private profileService: ProfileService
+  ) { }
 
   ngOnInit() {
     this.profileService.getAllProfiles().subscribe((profiles: Profile[]) => {
-      console.log('component profiles');
+      // console.log(profiles);
+      this.source.load(profiles);
     });
   }
 
