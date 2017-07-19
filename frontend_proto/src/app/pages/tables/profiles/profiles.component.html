@@ -2,7 +2,16 @@
 
   <div class="row">
     <ba-card baCardClass="with-scroll" class="smart-table-container">
-      <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+      <ng2-smart-table *ngIf="loader === 0" [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+
+      <div *ngIf="loader > 0" style="height: 100%">
+        <div>
+          <i class="fa fa-circle-o-notch fa-spin fa-5x" aria-hidden="true"></i>
+        </div>
+        <div class="loading-message">
+          <span *ngIf="loader === 1">{{'tables.profiles.loading' | translate}}</span>
+        </div>
+      </div>
     </ba-card>
   </div>
 

@@ -1,52 +1,57 @@
 {
-    "general": {
-        "home": "Home",
-        "menu": {
-            "dashboard": "Dashboard",
-            "maps": "Maps",
-            "leaflet_maps": "Leaflet Map",
-            "esri_maps": "Esri Map",
-            "tables": "Tables"
-        },
-        "language": {
-            "french": "French",
-            "english": "English"
-        },
-        "created_with": "Created with"
+  "general": {
+    "home": "Home",
+    "menu": {
+      "dashboard": "Dashboard",
+      "maps": "Maps",
+      "leaflet_maps": "Leaflet Map",
+      "esri_maps": "Esri Map",
+      "tables": "Tables"
     },
-    "dashboard": {
-        "acquisition_channels": "Acquisition Channels",
-        "feed": "News",
-        "tabs": {
-            "title": "Indicators",
-            "tab_1": {
-                "title": "Repository",
-                "chart_title": "Repository items"
-            },
-            "tab_2": "Feeds",
-            "tab_3": "Demands",
-            "tab_4": "Identifiers"
-        },
-        "actions_card": {
-            "title": "Stops",
-            "demands_summary": "Demands summary : ",
-            "accepted_demands": "Accepted demands",
-            "refused_demands": "Refused demands",
-            "on_hold_demands": "Demands on hold",
-            "consult_demands_on_hold": "Consult demands on hold",
-            "consult_demands": "Consult all my demands",
-            "extraction": "Extraction",
-            "last_generation": "Date of last generation :",
-            "download_files": "Download the files"
-        },
-        "feeds_card": {
-            "title": "Feeds",
-            "to_be_processed": "To be processed : ",
-            "in_failure": "In failure",
-            "succeeded": "Succeeded",
-            "consult_details": "Consult feeds details",
-            "identifiers": "Identifiers",
-            "identifiers_history": "Get the history of my last identifiers"
-        }
+    "language": {
+      "french": "French",
+      "english": "English"
+    },
+    "created_with": "Created with"
+  },
+  "dashboard": {
+    "acquisition_channels": "Acquisition Channels",
+    "feed": "News",
+    "tabs": {
+      "title": "Indicators",
+      "tab_1": {
+        "title": "Repository",
+        "chart_title": "Repository items"
+      },
+      "tab_2": "Feeds",
+      "tab_3": "Demands",
+      "tab_4": "Identifiers"
+    },
+    "actions_card": {
+      "title": "Stops",
+      "demands_summary": "Demands summary : ",
+      "accepted_demands": "Accepted demands",
+      "refused_demands": "Refused demands",
+      "on_hold_demands": "Demands on hold",
+      "consult_demands_on_hold": "Consult demands on hold",
+      "consult_demands": "Consult all my demands",
+      "extraction": "Extraction",
+      "last_generation": "Date of last generation :",
+      "download_files": "Download the files"
+    },
+    "feeds_card": {
+      "title": "Feeds",
+      "to_be_processed": "To be processed : ",
+      "in_failure": "In failure",
+      "succeeded": "Succeeded",
+      "consult_details": "Consult feeds details",
+      "identifiers": "Identifiers",
+      "identifiers_history": "Get the history of my last identifiers"
     }
+  },
+  "tables": {
+    "profiles": {
+      "loading": "Loading data..."
+    }
+  }
 }

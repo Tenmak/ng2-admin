@@ -11,7 +11,6 @@ import { Profile } from './profiles.interface';
   styleUrls: ['./profiles.component.scss']
 })
 export class ProfileComponent implements OnInit {
-
   query = '';
 
   settings = {
@@ -50,16 +49,27 @@ export class ProfileComponent implements OnInit {
   };
 
   source: LocalDataSource = new LocalDataSource();
+  loader = 1;
 
   constructor(
     private profileService: ProfileService
   ) { }
 
   ngOnInit() {
-    this.profileService.getAllProfiles().subscribe((profiles: Profile[]) => {
-      // console.log(profiles);
-      this.source.load(profiles);
-    });
+
+    console.log(this.source);
+
+
+    this.profileService.getAllProfiles().subscribe(
+      (profiles: Profile[]) => {
+        // console.log(profiles);
+        this.source.load(profiles);
+        this.loader = 0;
+      },
+      () => {
+        console.error('Unable to load data in the smartTable');
+        this.loader = 0;
+      });
   }
 
   onDeleteConfirm(event): void {

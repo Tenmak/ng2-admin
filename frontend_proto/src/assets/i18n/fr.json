@@ -48,5 +48,10 @@
       "identifiers": "Identifiants",
       "identifiers_history": "Voir l'historique de mes téléchargements d'ID"
     }
+  },
+  "tables": {
+    "profiles": {
+      "loading": "Chargement des données..."
+    }
   }
 }
