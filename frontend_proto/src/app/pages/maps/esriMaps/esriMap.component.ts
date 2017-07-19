@@ -69,12 +69,17 @@ export class EsriMapComponent implements OnInit {
   }
 
   // Create a map at the root dom node of this component
-  createMap([Map, Point, SpatialReference]) {
+  createMap([Map, Point, SpatialReference, Extent]) {
+    const spatialReference = new SpatialReference({ wkid: 102110 });
     const options = {
-      center: new Point(652628, 6861795, new SpatialReference({ wkid: 102110 })),
+      center: new Point(652628, 6861795, spatialReference),
       zoom: 6,
     };
     this.map = new Map(this.mapEl.nativeElement, options);
+    // Avoid inner script errors when dojo script is not initialized correctly
+    this.map.spatialReference = spatialReference;
+    // const extent = new Extent(-122.68, 45.53, -122.45, 45.60, spatialReference);
+    // this.map.extent = extent;
   }
 
   // Sets the geometryService instance to call methods from the REST API
@@ -216,9 +221,9 @@ export class EsriMapComponent implements OnInit {
         const featureLayersToSetEditable = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
         if (featureLayersToSetEditable.length === 0) {
           console.error('failed to initialize editable layers : retrying...');
-          setTimeout(() => {
-            return this.setLayersEditable(layerIds);
-          }, 0);
+          // setTimeout(() => {
+          //   return this.setLayersEditable(layerIds);
+          // }, 0);
         }
         featureLayersToSetEditable.forEach(featureLayer => {
           // Set feature layer editable
@@ -362,9 +367,9 @@ export class EsriMapComponent implements OnInit {
         const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
         if (featureLayersConcerned.length === 0) {
           console.error('failed to bind the drawing tool to the feature layers : retrying...');
-          setTimeout(() => {
-            return this.bufferMassSelection(layerIds);
-          }, 0);
+          // setTimeout(() => {
+          //   return this.bufferMassSelection(layerIds);
+          // }, 0);
         }
 
         // Get the Toolbar instance

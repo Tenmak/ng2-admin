@@ -19,7 +19,8 @@ export class EsriMapResolveService implements Resolve<any> {
       return this.esriLoader.loadModules([
         'esri/map',
         'esri/geometry/Point',
-        'esri/SpatialReference'
+        'esri/SpatialReference',
+        'esri/geometry/Extent'
       ]);
     });
   }

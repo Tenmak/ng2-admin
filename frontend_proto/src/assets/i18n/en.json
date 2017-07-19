@@ -5,7 +5,8 @@
             "dashboard": "Dashboard",
             "maps": "Maps",
             "leaflet_maps": "Leaflet Map",
-            "esri_maps": "Esri Map"
+            "esri_maps": "Esri Map",
+            "tables": "Tables"
         },
         "language": {
             "french": "French",

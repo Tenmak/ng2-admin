@@ -43,6 +43,18 @@ export const PAGES_MENU = [
             }
           }
         ]
+      },
+      {
+        path: 'tables',
+        data: {
+          menu: {
+            title: 'general.menu.tables',
+            icon: 'ion-ios-list-outline',
+            selected: false,
+            expanded: false,
+            order: 600,
+          }
+        }
       }
     ]
   }
