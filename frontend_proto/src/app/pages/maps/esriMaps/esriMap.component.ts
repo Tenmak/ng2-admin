@@ -23,6 +23,7 @@ export class EsriMapComponent implements OnInit {
   loadedFeatureLayers: any[] = [];
   geometryService = null;
   drawToolbar: any = null;
+  drawToolbar2: any = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,8 +47,8 @@ export class EsriMapComponent implements OnInit {
       // { id: 13 },
       // { id: 15 },
       { id: 0, options: { outFields: ['*'] } },
-      { id: 2, options: { outFields: ['*'] } },
-      { id: 4, options: { outFields: ['*'] } },
+      // { id: 2, options: { outFields: ['*'] } },
+      // { id: 4, options: { outFields: ['*'] } },
     ]
     const featureLayersToBufferize = [0];
 
@@ -63,7 +64,8 @@ export class EsriMapComponent implements OnInit {
           setTimeout(() => {
             this.setLayersEditable(editableFeatureLayers);
             this.bufferMassSelection(featureLayersToBufferize);
-          }, 0);
+            this.bufferAroundAreas(featureLayersToBufferize);
+          }, 500);
         }
       });
   }
@@ -73,7 +75,7 @@ export class EsriMapComponent implements OnInit {
     const spatialReference = new SpatialReference({ wkid: 102110 });
     const options = {
       center: new Point(652628, 6861795, spatialReference),
-      zoom: 6,
+      zoom: 7,
     };
     this.map = new Map(this.mapEl.nativeElement, options);
     // Avoid inner script errors when dojo script is not initialized correctly
@@ -103,6 +105,7 @@ export class EsriMapComponent implements OnInit {
         Draw
       ]) => {
         this.drawToolbar = new Draw(this.map);
+        this.drawToolbar2 = new Draw(this.map);
       });
   }
 
@@ -321,7 +324,7 @@ export class EsriMapComponent implements OnInit {
         const bufferParams = new BufferParameters();
         bufferParams.outSpatialReference = this.map.spatialReference;
         bufferParams.unit = 9036;  // kilometers
-        bufferParams.distances = [0.1];  // 100 m
+        bufferParams.distances = [0.05];  // 100 m
         bufferParams.geometries = [centerPoint.geometry];
 
         this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
@@ -336,7 +339,7 @@ export class EsriMapComponent implements OnInit {
 
           bufferedGeometries.forEach(geometry => {
             const graphic = new Graphic(geometry, symbol);
-            this.map.graphics.add(graphic);
+            this.map.add(graphic);
           });
         });
       });
@@ -350,9 +353,11 @@ export class EsriMapComponent implements OnInit {
       'esri/layers/FeatureLayer',
       'esri/tasks/BufferParameters',
       'esri/Color',
+      'esri/geometry/Point',
       'esri/symbols/SimpleLineSymbol',
       'esri/symbols/SimpleFillSymbol',
-      'esri/graphic'
+      'esri/graphic',
+      'esri/layers/GraphicsLayer'
     ])
       .then(([
         Draw,
@@ -360,9 +365,11 @@ export class EsriMapComponent implements OnInit {
         FeatureLayer,
         BufferParameters,
         Color,
+        Point,
         SimpleLineSymbol,
         SimpleFillSymbol,
-        Graphic
+        Graphic,
+        GraphicsLayer
       ]) => {
         const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
         if (featureLayersConcerned.length === 0) {
@@ -376,40 +383,62 @@ export class EsriMapComponent implements OnInit {
         this.drawToolbar.on('draw-complete', (RectangularSelectorGeometry) => {
           this.drawToolbar.deactivate();
 
-          // Select the points within the extent
+          // Initialize the Query
           const query = new Query();
           query.geometry = RectangularSelectorGeometry.geometry;
 
           // Manage the actions for each configured layer
           featureLayersConcerned.forEach(featureLayer => {
             featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, (features) => {
-              // calculate the convex hull
+              // Get the selected graphic points
               const points = features.map((feature) => {
                 return feature.geometry;
               });
 
+              // Only process if one point has been selected
               if (points.length > 0) {
-                // Apply Buffer on points
-                const bufferParams = new BufferParameters();
-                bufferParams.outSpatialReference = this.map.spatialReference;
-                bufferParams.unit = 9036;  // kilometers
-                bufferParams.distances = [0.1];  // 100 m
-                bufferParams.geometries = points;
-                bufferParams.unionResults = true;
+                // Get the Graphic layer if it exists or create it otherwise
+                let graphicLayer = this.map.getLayer('bufferGraphics');
+                if (!graphicLayer) {
+                  graphicLayer = new GraphicsLayer({ id: 'bufferGraphics' });
+                  this.map.addLayer(graphicLayer);
+                }
 
-                this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
-                  const symbol = new SimpleFillSymbol(
-                    SimpleFillSymbol.STYLE_SOLID,
-                    new SimpleLineSymbol(
-                      SimpleLineSymbol.STYLE_SOLID,
-                      new Color([255, 0, 0, 0.65]), 2
-                    ),
-                    new Color([255, 0, 0, 0.35])
-                  );
+                // Calculate the convex Hull geometry
+                this.geometryService.convexHull(points, (convexHullGeometry) => {
+                  let convexHullSymbol;
+                  switch (convexHullGeometry.type) {
+                    case 'polyline':
+                      convexHullSymbol = new SimpleLineSymbol();
+                      break;
+                    case 'polygon':
+                      convexHullSymbol = new SimpleFillSymbol();
+                      break;
+                  }
 
-                  bufferedGeometries.forEach(bufferedGeometry => {
-                    const graphic = new Graphic(bufferedGeometry, symbol);
-                    this.map.graphics.add(graphic);
+                  // Create the BufferParameters
+                  const bufferParams = new BufferParameters();
+                  bufferParams.outSpatialReference = this.map.spatialReference;
+                  bufferParams.unit = 9036;  // kilometers
+                  bufferParams.distances = [0.04];  // 40 m
+                  bufferParams.geometries = [convexHullGeometry];
+
+                  // Apply the buffer on the ConvexHullResult
+                  this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
+                    const symbol = new SimpleFillSymbol(
+                      SimpleFillSymbol.STYLE_SOLID,
+                      new SimpleLineSymbol(
+                        SimpleLineSymbol.STYLE_SOLID,
+                        new Color([255, 0, 0, 0.65]), 2
+                      ),
+                      new Color([255, 0, 0, 0.35])
+                    );
+
+                    // Show the buffer result
+                    bufferedGeometries.forEach(bufferedGeometry => {
+                      const graphic = new Graphic(bufferedGeometry, symbol, { buffer: true });
+                      graphicLayer.add(graphic);
+                    });
                   });
                 });
               }
@@ -419,7 +448,134 @@ export class EsriMapComponent implements OnInit {
       });
   }
 
-  // Activates the draw edition
+  // Manages the drawing tool to create a buffer graphic around several buffer on query selection
+  bufferAroundAreas(layerIds: number[]) {
+    this.esriLoader.loadModules([
+      'esri/toolbars/draw',
+      'esri/tasks/query',
+      'esri/layers/FeatureLayer',
+      'esri/tasks/BufferParameters',
+      'esri/Color',
+      'esri/geometry/Point',
+      'esri/symbols/SimpleLineSymbol',
+      'esri/symbols/SimpleFillSymbol',
+      'esri/graphic',
+      'esri/layers/GraphicsLayer'
+    ])
+      .then(([
+        Draw,
+        Query,
+        FeatureLayer,
+        BufferParameters,
+        Color,
+        Point,
+        SimpleLineSymbol,
+        SimpleFillSymbol,
+        Graphic,
+        GraphicsLayer
+      ]) => {
+        const featureLayersConcerned = this.loadedFeatureLayers.filter(layers => layerIds.includes(layers.layerId));
+        if (featureLayersConcerned.length === 0) {
+          console.error('failed to bind the drawing tool to the feature layers : retrying...');
+          // setTimeout(() => {
+          //   return this.bufferMassSelection(layerIds);
+          // }, 0);
+        }
+
+        // Get the Toolbar instance
+        this.drawToolbar2.on('draw-complete', (RectangularSelectorGeometry) => {
+          this.drawToolbar2.deactivate();
+
+          // Initialize the Query
+          const query = new Query();
+          query.geometry = RectangularSelectorGeometry.geometry;
+
+          // Manage the actions for each configured layer
+          featureLayersConcerned.forEach(featureLayer => {
+            featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, (features) => {
+              // Get the selected graphic points
+              const points = features.map((feature) => {
+                return feature.geometry;
+              });
+
+              // Only process if one point has been selected
+              if (points.length > 0) {
+                // Get the Graphic layer if it exists or create it otherwise
+                let graphicLayer = this.map.getLayer('bufferGraphics');
+                if (!graphicLayer) {
+                  graphicLayer = new GraphicsLayer({ id: 'bufferGraphics' });
+                  this.map.addLayer(graphicLayer);
+                }
+
+                // Calculate the convex Hull geometry
+                this.geometryService.convexHull(points, (convexHullGeometry) => {
+                  let convexHullSymbol;
+                  switch (convexHullGeometry.type) {
+                    case 'polyline':
+                      convexHullSymbol = new SimpleLineSymbol();
+                      break;
+                    case 'polygon':
+                      convexHullSymbol = new SimpleFillSymbol();
+                      break;
+                  }
+
+                  // Create the BufferParameters
+                  const bufferParams = new BufferParameters();
+                  bufferParams.outSpatialReference = this.map.spatialReference;
+                  bufferParams.unit = 9036;  // kilometers
+                  bufferParams.distances = [0.04];  // 40 m
+                  bufferParams.geometries = [convexHullGeometry];
+
+                  // Apply the buffer on the ConvexHullResult
+                  this.geometryService.buffer(bufferParams, (bufferedGeometries) => {
+                    const symbol = new SimpleFillSymbol(
+                      SimpleFillSymbol.STYLE_SOLID,
+                      new SimpleLineSymbol(
+                        SimpleLineSymbol.STYLE_SOLID,
+                        new Color([255, 0, 0, 0.65]), 2
+                      ),
+                      new Color([255, 0, 0, 0.35])
+                    );
+
+                    // Show the buffer result
+                    bufferedGeometries.forEach(bufferedGeometry => {
+                      /** Start the buffer of these **/
+                      // Create the BufferParameters
+                      const topBufferParams = new BufferParameters();
+                      topBufferParams.outSpatialReference = this.map.spatialReference;
+                      topBufferParams.unit = 9036;  // kilometers
+                      topBufferParams.distances = [0.04];  // 40 m
+                      topBufferParams.geometries = [bufferedGeometry];
+
+                      // Apply the buffer on the last buffer result
+                      this.geometryService.buffer(topBufferParams, (bufferedTopGeometries) => {
+                        const symbolTopBuffer = new SimpleFillSymbol(
+                          SimpleFillSymbol.STYLE_SOLID,
+                          new SimpleLineSymbol(
+                            SimpleLineSymbol.STYLE_SOLID,
+                            new Color([0, 0, 255, 0.45]), 2
+                          ),
+                          new Color([0, 0, 255, 0.15])
+                        );
+
+                        // Show the new buffer result
+                        bufferedTopGeometries.forEach(bufferedTopGeometry => {
+                          const topGraphic = new Graphic(bufferedTopGeometry, symbolTopBuffer, { buffer: true });
+                          graphicLayer.add(topGraphic);
+                        });
+                      });
+                    });
+                  });
+                });
+              }
+            });
+          });
+        });
+
+      });
+  }
+
+  // Activates the first draw edition
   activateToolbar(): void {
     this.esriLoader.loadModules([
       'esri/toolbars/draw'
@@ -428,6 +584,18 @@ export class EsriMapComponent implements OnInit {
         Draw
       ]) => {
         this.drawToolbar.activate(Draw.EXTENT);
+      });
+  }
+
+  // Activates the second draw edition
+  activateToolbar2(): void {
+    this.esriLoader.loadModules([
+      'esri/toolbars/draw'
+    ])
+      .then(([
+        Draw
+      ]) => {
+        this.drawToolbar2.activate(Draw.EXTENT);
       });
   }
 }
