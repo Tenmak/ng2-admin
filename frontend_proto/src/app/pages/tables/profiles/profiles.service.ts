@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, Http } from '@angular/http';
+import { Headers, RequestOptions, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Profile } from './profiles.interface';
@@ -15,7 +15,7 @@ export class ProfileService {
     const url = `http://ak19237:8080/profils/all`;
 
     return this.http.get(url)
-      .map((res: any) => {
+      .map((res: Response) => {
         return res.json();
       });
   }

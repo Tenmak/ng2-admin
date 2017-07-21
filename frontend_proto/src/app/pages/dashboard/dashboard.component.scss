@@ -29,6 +29,8 @@
   padding-bottom: 0px;
 }
 
- /deep/ .card > .card-body {
-  padding: 0px;
+ /deep/ .indicators {
+  .card > .card-body {
+    padding: 15px 22px;
+  }
 }
