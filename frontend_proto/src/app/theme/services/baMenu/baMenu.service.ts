@@ -19,7 +19,31 @@ export class BaMenuService {
    */
   public updateMenuByRoutes(routes: Routes) {
     const convertedRoutes = this.convertRoutesToMenus(_.cloneDeep(routes));
+
+    this.fixRoutes(convertedRoutes);
+
     this.menuItems.next(convertedRoutes);
+  }
+
+  /**
+   * Fix complex routing => https://github.com/akveo/ng2-admin/issues/1185
+   */
+  private fixRoutes(convertedRoutes: any) {
+    convertedRoutes.forEach((routeItem) => {
+      const newPaths = [];
+      routeItem['route'].paths.forEach((path) => {
+        if (path.indexOf('/') > 0) {
+          const firstPath = path.substring(0, path.indexOf('/'));
+          const secondPath = path.substring(path.indexOf('/') + 1);
+          newPaths.push(firstPath);
+          newPaths.push(secondPath);
+        } else {
+          newPaths.push(path);
+        }
+      });
+
+      routeItem.route.paths = newPaths;
+    });
   }
 
   public convertRoutesToMenus(routes: Routes): any[] {

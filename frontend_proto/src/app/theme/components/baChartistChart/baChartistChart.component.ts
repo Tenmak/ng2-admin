@@ -1,26 +1,27 @@
 import {
-    Component,
-    ViewChild,
-    Input,
-    Output,
-    ElementRef,
-    EventEmitter
+  Component,
+  ViewChild,
+  Input,
+  Output,
+  ElementRef,
+  EventEmitter,
+  OnChanges, AfterViewInit, OnDestroy
 } from '@angular/core';
 
-import * as Chartist from 'chartist';
+// import * as Chartist from 'chartist';
 
 @Component({
   selector: 'ba-chartist-chart',
   templateUrl: './baChartistChart.html',
   providers: [],
 })
-export class BaChartistChart {
+export class BaChartistChart implements OnChanges, AfterViewInit, OnDestroy {
 
-  @Input() baChartistChartType:string;
-  @Input() baChartistChartData:Object;
-  @Input() baChartistChartOptions:Object;
-  @Input() baChartistChartResponsive:Object;
-  @Input() baChartistChartClass:string;
+  @Input() baChartistChartType: string;
+  @Input() baChartistChartData: Object;
+  @Input() baChartistChartOptions: Object;
+  @Input() baChartistChartResponsive: Object;
+  @Input() baChartistChartClass: string;
   @Output() onChartReady = new EventEmitter<any>();
 
   @ViewChild('baChartistChart') public _selector: ElementRef;
@@ -28,8 +29,8 @@ export class BaChartistChart {
   private chart;
 
   ngAfterViewInit() {
-    this.chart = new Chartist[this.baChartistChartType](this._selector.nativeElement, this.baChartistChartData, this.baChartistChartOptions, this.baChartistChartResponsive);
-    this.onChartReady.emit(this.chart);
+    // this.chart = new Chartist[this.baChartistChartType](this._selector.nativeElement, this.baChartistChartData, this.baChartistChartOptions, this.baChartistChartResponsive);
+    // this.onChartReady.emit(this.chart);
   }
 
   ngOnChanges(changes) {
@@ -38,7 +39,7 @@ export class BaChartistChart {
     }
   }
 
-  ngOnDestroy():void {
+  ngOnDestroy(): void {
     if (this.chart) {
       this.chart.detach();
     }

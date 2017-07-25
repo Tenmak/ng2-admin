@@ -15,34 +15,34 @@ export const PAGES_MENU = [
         }
       },
       {
-        path: 'maps',
+        path: 'maps\/esrimaps',
         data: {
           menu: {
-            title: 'general.menu.maps',
+            title: 'general.menu.esri_maps',
             icon: 'ion-ios-location-outline',
             selected: false,
             expanded: false,
             order: 600,
           }
         },
-        children: [
-          {
-            path: 'leafletmaps',
-            data: {
-              menu: {
-                title: 'general.menu.leaflet_maps',
-              }
-            }
-          },
-          {
-            path: 'esrimaps',
-            data: {
-              menu: {
-                title: 'general.menu.esri_maps',
-              }
-            }
-          }
-        ]
+        // children: [
+        //   {
+        //     path: 'leafletmaps',
+        //     data: {
+        //       menu: {
+        //         title: 'general.menu.leaflet_maps',
+        //       }
+        //     }
+        //   },
+        //   {
+        //     path: 'esrimaps',
+        //     data: {
+        //       menu: {
+        //         title: 'general.menu.esri_maps',
+        //       }
+        //     }
+        //   }
+        // ]
       },
       {
         path: 'tables',

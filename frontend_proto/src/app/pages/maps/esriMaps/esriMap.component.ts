@@ -62,7 +62,7 @@ export class EsriMapComponent implements OnInit {
         if (this.loadedFeatureLayers.length > 0) {
           // Wait for the DOM elements to be loaded to operate
           setTimeout(() => {
-            this.setLayersEditable(editableFeatureLayers);
+            // this.setLayersEditable(editableFeatureLayers);
             this.bufferMassSelection(featureLayersToBufferize);
             this.bufferAroundAreas(featureLayersToBufferize);
           }, 500);

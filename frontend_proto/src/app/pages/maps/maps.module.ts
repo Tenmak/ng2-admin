@@ -7,7 +7,6 @@ import { NgaModule } from '../../theme/nga.module';
 
 import { routing } from './maps.routing';
 import { MapsComponent } from './maps.component';
-import { LeafletMapComponent } from './leafletMaps/leafletMap.component';
 import { EsriMapComponent } from './esriMaps/esriMap.component';
 
 import { EsriMapResolveService } from './esriMaps/esriMap.service';
@@ -22,7 +21,6 @@ import { EsriMapResolveService } from './esriMaps/esriMap.service';
   ],
   declarations: [
     MapsComponent,
-    LeafletMapComponent,
     EsriMapComponent
   ],
   providers: [

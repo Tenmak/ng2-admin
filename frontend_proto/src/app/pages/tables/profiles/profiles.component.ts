@@ -62,7 +62,7 @@ export class ProfileComponent implements OnInit {
         setTimeout(() => {
           this.source.load(profiles);
           this.loader = 0;
-        }, 4000)
+        }, 1000)
       },
       () => {
         console.error('Unable to load data in the smartTable');

@@ -2,12 +2,12 @@ import {Component, ViewChild, Input, Output, ElementRef, EventEmitter} from '@an
 
 import {BaThemePreloader} from '../../../theme/services';
 
-import 'amcharts3';
-import 'amcharts3/amcharts/plugins/responsive/responsive.js';
-import 'amcharts3/amcharts/serial.js';
+// import 'amcharts3';
+// import 'amcharts3/amcharts/plugins/responsive/responsive.js';
+// import 'amcharts3/amcharts/serial.js';
 
-import 'ammap3';
-import 'ammap3/ammap/maps/js/worldLow';
+// import 'ammap3';
+// import 'ammap3/ammap/maps/js/worldLow';
 
 
 import {BaAmChartThemeService} from './baAmChartTheme.service';
@@ -31,7 +31,7 @@ export class BaAmChart {
   }
 
   ngOnInit() {
-    AmCharts.themes.blur = this._baAmChartThemeService.getTheme();
+    // AmCharts.themes.blur = this._baAmChartThemeService.getTheme();
   }
 
   ngAfterViewInit() {
