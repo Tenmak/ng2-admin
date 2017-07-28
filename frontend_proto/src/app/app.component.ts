@@ -12,7 +12,7 @@ import { layoutPaths } from './theme/theme.constants';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  isMenuCollapsed = false;
+  isMenuCollapsed;
 
   constructor(
     private _state: GlobalState,
@@ -31,8 +31,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this._loadImages();
 
-    this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
+    this._state.subscribe('menu.isCollapsed', (isCollapsed: boolean) => {
       this.isMenuCollapsed = isCollapsed;
+      window.localStorage.setItem('isMenuCollapsed', isCollapsed.toString());
     });
   }
 

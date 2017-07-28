@@ -19,6 +19,11 @@
   padding-bottom: 0px;
 }
 
+/deep/ .row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
  /deep/ .card > .card-body {
   padding: 0px;
 }

@@ -123,6 +123,22 @@
   }
 }
 
+.nav.nav-tabs {
+  a {
+    color: $label-text;
+    &:hover {
+      color: $label-text;
+    }
+  }
+
+  .active {
+    color: #014c8c;
+    &:hover {
+      color: #014c8c;
+    }
+  }
+}
+
 // .nav.nav-tabs {
 //   border-top-left-radius: 5px;
 //   border-top-right-radius: 5px;

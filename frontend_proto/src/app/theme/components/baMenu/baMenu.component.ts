@@ -63,7 +63,8 @@ export class BaMenu implements OnInit, OnDestroy {
 
   public hoverItem($event): void {
     this.showHoverElem = true;
-    this.hoverElemHeight = $event.currentTarget.clientHeight;
+    // this.hoverElemHeight = $event.currentTarget.clientHeight;
+    this.hoverElemHeight = $event.currentTarget.clientHeight - 2;
     // TODO: get rid of magic 66 constant
     this.hoverElemTop = $event.currentTarget.getBoundingClientRect().top - 66;
   }

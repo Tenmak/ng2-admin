@@ -10,7 +10,7 @@ import { routing } from './tables.routing';
 import { TablesComponent } from './tables.component';
 import { ProfileComponent } from './profiles/profiles.component';
 
-import { ProfileService } from './profiles/profiles.service';
+import { ProfileService } from './profiles/profiles.service'; 
 
 @NgModule({
   imports: [

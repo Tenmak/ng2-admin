@@ -15,7 +15,7 @@ export const PAGES_MENU = [
         }
       },
       {
-        path: 'maps\/esrimaps',
+        path: 'maps/esrimaps',
         data: {
           menu: {
             title: 'general.menu.esri_maps',
@@ -25,24 +25,6 @@ export const PAGES_MENU = [
             order: 600,
           }
         },
-        // children: [
-        //   {
-        //     path: 'leafletmaps',
-        //     data: {
-        //       menu: {
-        //         title: 'general.menu.leaflet_maps',
-        //       }
-        //     }
-        //   },
-        //   {
-        //     path: 'esrimaps',
-        //     data: {
-        //       menu: {
-        //         title: 'general.menu.esri_maps',
-        //       }
-        //     }
-        //   }
-        // ]
       },
       {
         path: 'tables',

@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgUploaderModule } from 'ngx-uploader';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
   BaThemeConfig
@@ -28,7 +29,8 @@ import {
   BaPageTop,
   BaPictureUploader,
   BaSidebar,
-  BaFileUploader
+  BaFileUploader,
+  BaHozMenuComponent,
 } from './components';
 
 import { BaCardBlur } from './components/baCard/baCardBlur.directive';
@@ -72,7 +74,8 @@ const NGA_COMPONENTS = [
   BaPageTop,
   BaPictureUploader,
   BaSidebar,
-  BaFileUploader
+  BaFileUploader,
+  BaHozMenuComponent,
 ];
 
 const NGA_DIRECTIVES = [
@@ -112,7 +115,8 @@ const NGA_VALIDATORS = [
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    NgUploaderModule
+    NgUploaderModule,
+    NgbModule.forRoot()
   ],
   exports: [
     ...NGA_PIPES,

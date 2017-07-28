@@ -1,0 +1,6 @@
+<ngb-tabset #tabset (tabChange)="onTabChange($event)">
+  <ngb-tab id="{{ item.title }}" title="{{ item.title |translate}}" *ngFor="let item of menuItems" >
+    <ng-template ngbTabContent>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>

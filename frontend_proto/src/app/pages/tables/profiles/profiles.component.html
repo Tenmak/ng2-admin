@@ -1,7 +1,7 @@
 <div class="widgets">
 
   <div class="row">
-    <ba-card baCardClass="with-scroll" class="smart-table-container">
+    <ba-card baCardClass="with-scroll" class="popular-app smart-table-container">
       <ng2-smart-table *ngIf="loader === 0" [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
 
       <div *ngIf="loader > 0" style="height: 325px; width: 1012px;">

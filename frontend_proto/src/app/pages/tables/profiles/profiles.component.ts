@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-import { ProfileService } from './profiles.service';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { Profile } from './profiles.interface';
+
+import { ProfileService } from './profiles.service';
 
 @Component({
   selector: 'reflex-profiles',

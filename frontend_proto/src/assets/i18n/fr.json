@@ -2,11 +2,10 @@
   "general": {
     "home": "Accueil",
     "menu": {
-      "dashboard": "Dashboard",
+      "dashboard": "Accueil",
       "maps": "Maps",
-      "leaflet_maps": "Map Leaflet",
-      "esri_maps": "Map Esri",
-      "tables": "Tableaux"
+      "esri_maps": "Gestion du référentiel arrêts",
+      "tables": "Administration"
     },
     "language": {
       "french": "Français",
