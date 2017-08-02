@@ -59,10 +59,8 @@ export class ProfileComponent implements OnInit {
     this.profileService.getAllProfiles().subscribe(
       (profiles: Profile[]) => {
         // console.log(profiles);
-        setTimeout(() => {
-          this.source.load(profiles);
-          this.loader = 0;
-        }, 1000)
+        this.source.load(profiles);
+        this.loader = 0;
       },
       () => {
         console.error('Unable to load data in the smartTable');
