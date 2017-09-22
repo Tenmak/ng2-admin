@@ -4,7 +4,7 @@
 const { SpecReporter } = require('jasmine-spec-reporter');
 
 exports.config = {
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 18000,
   specs: [
     './e2e/**/*.e2e-spec.ts'
   ],
@@ -12,7 +12,7 @@ exports.config = {
     'browserName': 'chrome',
     'chromeOptions': {
       'args': ['show-fps-counter=true', '--no-sandbox']
-    }
+    },
   },
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
@@ -20,9 +20,9 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
-    print: function() {}
+    print: function () { }
   },
-  beforeLaunch: function() {
+  beforeLaunch: function () {
     require('ts-node').register({
       project: 'e2e/tsconfig.e2e.json'
     });

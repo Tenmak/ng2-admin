@@ -11,6 +11,7 @@ import { ProfileService } from './profiles.service';
   styleUrls: ['./profiles.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  temp = true;
   query = '';
 
   settings = {
@@ -56,16 +57,38 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.profileService.getAllProfiles().subscribe(
-      (profiles: Profile[]) => {
-        // console.log(profiles);
-        this.source.load(profiles);
-        this.loader = 0;
+    if (this.temp) {
+      this.loader = 0;
+      this.source.load(this.addMockData());
+    } else {
+      this.profileService.getAllProfiles().subscribe(
+        (profiles: Profile[]) => {
+          // console.log(profiles);
+          this.source.load(profiles);
+          this.loader = 0;
+        },
+        () => {
+          console.error('Unable to load data in the smartTable');
+          this.loader = 0;
+        });
+    }
+  }
+
+  addMockData(): Profile[] {
+    return [
+      {
+        id: 1,
+        libelle: 'toto',
+        typeProfilId: 1,
+        typeProfilLibelle: 'toto'
       },
-      () => {
-        console.error('Unable to load data in the smartTable');
-        this.loader = 0;
-      });
+      {
+        id: 2,
+        libelle: 'tata',
+        typeProfilId: 2,
+        typeProfilLibelle: 'tata'
+      }
+    ];
   }
 
   onDeleteConfirm(event): void {
