@@ -76,7 +76,7 @@
     "zone.js": "0.8.16"
   },
   "devDependencies": {
-    "@angular/cli": "^1.1.2",
+    "@angular/cli": "^1.4.7",
     "@angular/compiler-cli": "^4.4.3",
     "@types/fullcalendar": "2.7.40",
     "@types/jasmine": "2.5.38",
@@ -108,6 +108,6 @@
     "typogr": "0.6.6",
     "underscore": "1.8.3",
     "wintersmith": "2.2.5",
-    "wintersmith-sassy": "1.1.0"
+    "wintersmith-sassy": "1.2.0"
   }
 }
