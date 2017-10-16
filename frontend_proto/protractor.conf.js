@@ -12,7 +12,7 @@ exports.config = {
     'browserName': 'chrome',
     'chromeOptions': {
       // 'args': ['show-fps-counter=true', '--no-sandbox']
-      'args': [ "--headless", "--disable-gpu", "--window-size=800x600" ]
+      'args': ['--headless', '--disable-gpu', '--window-size=800x600', '--no-sandbox']
     },
   },
   directConnect: true,
