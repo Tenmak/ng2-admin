@@ -32,13 +32,13 @@ module.exports = function (config) {
     angularCli: {
       environment: 'dev'
     },
-    reporters: config.angularCli && config.angularCli.codeCoverage
-      ? ['progress', 'coverage-istanbul']
-      : ['progress', 'kjhtml'],
-    // reporters: ['dots', 'junit'],
-    // junitReporter = {
-    //   outputFile: 'test-results.xml'
-    // },
+    // reporters: config.angularCli && config.angularCli.codeCoverage
+    //   ? ['progress', 'coverage-istanbul']
+    //   : ['progress', 'kjhtml'],
+    reporters: ['progress', 'junit'],
+    junitReporter = {
+      outputFile: 'test-results.xml'
+    },
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
@@ -52,9 +52,7 @@ module.exports = function (config) {
           '--headless',
           '--disable-gpu',
           // Without a remote debugging port, Google Chrome exits immediately.
-          '--remote-debugging-port=9222',
-          // Needed by Jenkins
-          '--no-sandbox'
+          '--remote-debugging-port=9223',
         ],
       }
     }
