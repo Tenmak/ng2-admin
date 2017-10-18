@@ -40,6 +40,9 @@ testem.log
 /e2e/*.js
 /e2e/*.map
 
+# ng tests
+/test-output
+
 # System Files
 .DS_Store
 Thumbs.db
