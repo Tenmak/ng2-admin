@@ -40,7 +40,7 @@ module.exports = function (config) {
     junitReporter: {
       useBrowserName: false,
       outputDir: 'test-output',
-      outputFile: 'tests-results.xml',
+      outputFile: 'ng-test-results.xml',
     },
     port: 9876,
     colors: true,

@@ -3647,17 +3647,24 @@ jade@~1.11.0:
     void-elements "~2.0.1"
     with "~4.0.0"
 
-jasmine-core@2.5.2:
-  version "2.5.2"
-  resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-2.5.2.tgz#6f61bd79061e27f43e6f9355e44b3c6cab6ff297"
+jasmine-core@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-2.8.0.tgz#bcc979ae1f9fd05701e45e52e65d3a5d63f1a24e"
 
 jasmine-core@~2.6.0:
   version "2.6.4"
   resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-2.6.4.tgz#dec926cd0a9fa287fb6db5c755fa487e74cecac5"
 
-jasmine-spec-reporter@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/jasmine-spec-reporter/-/jasmine-spec-reporter-3.2.0.tgz#fdbe85a80ccdd3b276746bc77fde83c1ce773eff"
+jasmine-reporters@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.npmjs.org/jasmine-reporters/-/jasmine-reporters-2.2.1.tgz#de9a9201367846269e7ca8adff5b44221671fcbd"
+  dependencies:
+    mkdirp "^0.5.1"
+    xmldom "^0.1.22"
+
+jasmine-spec-reporter@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.npmjs.org/jasmine-spec-reporter/-/jasmine-spec-reporter-4.2.1.tgz#1d632aec0341670ad324f92ba84b4b32b35e9e22"
   dependencies:
     colors "1.1.2"
 
@@ -7716,7 +7723,7 @@ xmlbuilder@>=1.0.0, xmlbuilder@^4.1.0:
   dependencies:
     lodash "^4.0.0"
 
-xmldom@^0.1.19:
+xmldom@^0.1.19, xmldom@^0.1.22:
   version "0.1.27"
   resolved "https://registry.npmjs.org/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
 
