@@ -17,7 +17,7 @@ node {
     stage('checkout') {
         checkout([
           $class: 'GitSCM', branches: [[name: '*/master']],
-          userRemoteConfigs: [[url: 'git@bitbucket.org:BRNTZN/repository2.git',credentialsId:'jenkinsmaster']]
+          userRemoteConfigs: [[url: 'ssh://git@gitlab.akka.eu:22522/stif-reflex/migration-frontend.git',credentialsId:'jean-philippe.janece']]
         ])
     }
     
