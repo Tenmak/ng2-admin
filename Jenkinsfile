@@ -3,10 +3,10 @@ node {
     env.PATH = "${nodeHome}/bin:${env.PATH}"
 
     stage('check tools') {
-        bash "node -v"
-        bash "npm -v"
-        bash "npm config set proxy http://bas-proxy-03.akka.eu:9090"
-        bash "npm config set https-proxy http://bas-proxy-03.akka.eu:9090"
+        sh "node -v"
+        sh "npm -v"
+        sh "npm config set proxy http://bas-proxy-03.akka.eu:9090"
+        sh "npm config set https-proxy http://bas-proxy-03.akka.eu:9090"
     }
 
     stage('checkout') {
@@ -17,11 +17,11 @@ node {
     }
     
     stage('npm install') {
-        bash "export HTTP_PROXY=http://bas-proxy-03.akka.eu:9090; export HTTPS_PROXY=https://bas-proxy-03.akka.eu:9090; cd frontend_proto; npm install --silent"
+        sh "export HTTP_PROXY=http://bas-proxy-03.akka.eu:9090; export HTTPS_PROXY=https://bas-proxy-03.akka.eu:9090; cd frontend_proto; npm install --silent"
     }
 
     stage('unit tests') {
-        bash "unset HTTP_PROXY; unset HTTPS_PROXY; cd frontend_proto; [[ -f ./test-output/tests-results.xml ]] && rm ./test-output/tests-results.xml; ng test --progress=false"
+        sh "unset HTTP_PROXY; unset HTTPS_PROXY; cd frontend_proto; if [ -f ./test-output/tests-results.xml ]; then rm ./test-output/tests-results.xml; fi; ng test --progress=false"
     }
 
 }
