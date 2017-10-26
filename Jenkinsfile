@@ -1,8 +1,8 @@
 node {
     def nodeHome = tool name: 'node-8.5.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-    def HTTP_PROXY=http://bas-proxy-03.akka.eu:9090
-    def HTTPS_PROXY=https://bas-proxy-03.akka.eu:9090
-    env.PATH = "${nodeHome}/bin:${env.PATH}:$HTTP_PROXY:$HTTPS_PROXY"
+    #def HTTP_PROXY=http://bas-proxy-03.akka.eu:9090
+    #def HTTPS_PROXY=https://bas-proxy-03.akka.eu:9090
+    env.PATH = "${nodeHome}/bin:${env.PATH}"
 
     stage('check tools') {
         sh "node -v"
@@ -22,7 +22,7 @@ node {
     }
     
     stage('npm install') {
-        sh "cd frontend_proto; npm install --silent"
+        sh "export HTTP_PROXY=http://bas-proxy-03.akka.eu:9090; export HTTPS_PROXY=https://bas-proxy-03.akka.eu:9090; cd frontend_proto; npm install --silent"
     }
 
     stage('unit tests') {
