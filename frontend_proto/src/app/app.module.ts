@@ -61,7 +61,4 @@ export interface StoreType {
 })
 
 export class AppModule {
-
-  constructor(public appState: AppState) {
-  }
 }
