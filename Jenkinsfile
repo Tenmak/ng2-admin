@@ -21,7 +21,7 @@ node {
     }
 
     stage('unit tests') {
-        sh "unset HTTP_PROXY; unset HTTPS_PROXY; cd frontend_proto; rm ./test-output/tests-results.xml; ng test --progress=false"
+        sh "unset HTTP_PROXY; unset HTTPS_PROXY; cd frontend_proto; [[ -f ./test-output/tests-results.xml ]] && rm ./test-output/tests-results.xml; ng test --progress=false"
     }
 
 }
