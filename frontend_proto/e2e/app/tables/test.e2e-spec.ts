@@ -11,9 +11,11 @@ describe('Tables Module test suite', () => {
 
   it('should test something on the table', () => {
     const tableFirstRow = element.all(by.css('ng2-smart-table-cell')).first();
-    const tableFirstCellData = tableFirstRow.$('table-cell-view-mode').$('div').$('div').getText()
-      .then((value) => {
-        expect(value).toBe('1');
-      });
+    setTimeout(() => {
+      const tableFirstCellData = tableFirstRow.$('table-cell-view-mode').$('div').$('div').getText()
+        .then((value) => {
+          expect(value).toBe('1');
+        });
+    }, 1000);
   });
 });
