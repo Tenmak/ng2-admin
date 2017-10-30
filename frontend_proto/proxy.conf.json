@@ -1,0 +1,21 @@
+{
+  "/angular": {
+    "target": {
+      "host": "github.com",
+      "protocol": "https:",
+      "port": 443
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  },
+  "/api": {
+    "target": "/js.arcgis.com/",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}
