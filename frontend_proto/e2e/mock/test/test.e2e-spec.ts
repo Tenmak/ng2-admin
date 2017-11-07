@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-xdescribe('Protractor testing suite with TypeScript', () => {
+describe('Protractor testing suite with TypeScript', () => {
   beforeAll(() => {
     browser.get('/');
 
@@ -9,7 +9,7 @@ xdescribe('Protractor testing suite with TypeScript', () => {
     });
   });
 
-  describe('Protractor first test suite', () => {
+  xdescribe('Protractor first test suite', () => {
     it('should navigate to the tables', () => {
       const navigationTablesButton = element(by.id('general.menu.tables'));
       navigationTablesButton.click();
