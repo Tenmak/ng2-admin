@@ -40,6 +40,9 @@ exports.config = {
         filePrefix: 'ng-e2e-results',
         consolidateAll: true,
         modifySuiteName: function (generatedSuiteName, suite) {
+          log('generated => ', generatedSuiteName);
+          log('suite => ', suite);
+
           return '[E2E].' + generatedSuiteName;
         }
       })
