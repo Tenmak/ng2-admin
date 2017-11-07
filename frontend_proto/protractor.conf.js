@@ -32,9 +32,6 @@ exports.config = {
     // Register jasmine library
     const jasmineReporters = require('jasmine-reporters');
     jasmine.getEnv().addReporter(
-      // new SpecReporter({
-      //   spec: { displayStacktrace: true }
-      // }),
       new jasmineReporters.JUnitXmlReporter({
         savePath: 'test-output',
         filePrefix: 'ng-e2e-results',
