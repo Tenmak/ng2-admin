@@ -38,7 +38,10 @@ exports.config = {
       new jasmineReporters.JUnitXmlReporter({
         savePath: 'test-output',
         filePrefix: 'ng-e2e-results',
-        consolidateAll: true
+        consolidateAll: true,
+        modifySuiteName: function (generatedSuiteName, suite) {
+          return '[E2E]' + generatedSuiteName;
+        }
       })
     );
   }
