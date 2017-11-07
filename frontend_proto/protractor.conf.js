@@ -39,9 +39,7 @@ exports.config = {
         savePath: 'test-output',
         filePrefix: 'ng-e2e-results',
         consolidateAll: true,
-        modifySuiteName: function (generatedSuiteName, suite) {
-          console.log('suite => ', suite);
-
+        modifySuiteName: (generatedSuiteName, suite) => {
           return '[E2E].' + generatedSuiteName;
         }
       })
