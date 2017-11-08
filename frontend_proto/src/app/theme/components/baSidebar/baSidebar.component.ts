@@ -37,15 +37,15 @@ export class BaSidebar implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Bind the collapse on ActivatedRoute
-    this._onRouteChange = this._router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        if (this._router.url.includes('tables')) {
-          this.menuExpand();
-        } else if (!this.isMenuCollapsed) {
-          this.menuCollapse();
-        }
-      }
-    });
+    // this._onRouteChange = this._router.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     if (this._router.url.includes('tables')) {
+    //       this.menuExpand();
+    //     } else if (!this.isMenuCollapsed) {
+    //       this.menuCollapse();
+    //     }
+    //   }
+    // });
   }
 
   public ngAfterViewInit(): void {

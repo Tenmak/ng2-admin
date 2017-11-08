@@ -1,8 +1,8 @@
 import { NgModule, ApplicationRef } from '@angular/core';
-import { Http } from '@angular/http';
+// import { Http, HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ import { GlobalState } from './global.state';
 import { AppState, InternalStateType } from './app.service';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: Http) {
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
@@ -36,12 +36,13 @@ export interface StoreType {
 @NgModule({
   imports: [
     BrowserModule,
-    HttpModule,
+    // HttpModule,
+    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [Http],
+        deps: [HttpClient],
       }
     }),
     RouterModule,
