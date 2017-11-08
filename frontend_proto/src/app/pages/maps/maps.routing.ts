@@ -10,6 +10,9 @@ const routes: Routes = [
     component: MapsComponent,
     children: [
       {
+        path: '', redirectTo: 'esrimaps', pathMatch: 'full'
+      },
+      {
         path: 'esrimaps', component: EsriMapComponent,
         resolve: {
           esriModules: EsriMapResolveService

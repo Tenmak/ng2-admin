@@ -28,7 +28,7 @@ exports.config = {
       project: 'e2e/tsconfig.e2e.json'
     });
   },
-  onPrepare() {
+  onPrepare(browser) {
     // Register jasmine library
     const jasmineReporters = require('jasmine-reporters');
     jasmine.getEnv().addReporter(
@@ -41,5 +41,5 @@ exports.config = {
         consolidateAll: true
       })
     );
-  }
+  },
 };

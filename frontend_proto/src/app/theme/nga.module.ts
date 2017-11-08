@@ -2,7 +2,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgUploaderModule } from 'ngx-uploader';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -27,10 +26,7 @@ import {
   BaMsgCenter,
   BaMultiCheckbox,
   BaPageTop,
-  BaPictureUploader,
   BaSidebar,
-  BaFileUploader,
-  BaHozMenuComponent,
 } from './components';
 
 import { BaCardBlur } from './components/baCard/baCardBlur.directive';
@@ -72,10 +68,7 @@ const NGA_COMPONENTS = [
   BaMsgCenter,
   BaMultiCheckbox,
   BaPageTop,
-  BaPictureUploader,
   BaSidebar,
-  BaFileUploader,
-  BaHozMenuComponent,
 ];
 
 const NGA_DIRECTIVES = [
@@ -115,7 +108,6 @@ const NGA_VALIDATORS = [
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    NgUploaderModule,
     NgbModule.forRoot()
   ],
   exports: [
