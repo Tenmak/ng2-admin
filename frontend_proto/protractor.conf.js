@@ -15,8 +15,8 @@ exports.config = {
       'args': ['--headless', '--disable-gpu', '--window-size=800x600']
     },
   },
-  directConnect: true,
   baseUrl: 'http://localhost:4201/',
+  directConnect: true,
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
@@ -28,18 +28,18 @@ exports.config = {
       project: 'e2e/tsconfig.e2e.json'
     });
   },
-  onPrepare() {
+  onPrepare(browser) {
     // Register jasmine library
     const jasmineReporters = require('jasmine-reporters');
     jasmine.getEnv().addReporter(
-      // new SpecReporter({
-      //   spec: { displayStacktrace: true }
-      // }),
       new jasmineReporters.JUnitXmlReporter({
         savePath: 'test-output',
         filePrefix: 'ng-e2e-results',
-        consolidateAll: true
+        consolidateAll: true,
+        modifySuiteName: (generatedSuiteName, suite) => {
+          return '[E2E].' + generatedSuiteName;
+        }
       })
     );
-  }
+  },
 };

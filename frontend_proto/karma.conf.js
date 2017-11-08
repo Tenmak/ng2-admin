@@ -41,6 +41,7 @@ module.exports = function (config) {
       useBrowserName: false,
       outputDir: 'test-output',
       outputFile: 'ng-test-results.xml',
+      suite: '[Karma]'
     },
     port: 9876,
     colors: true,

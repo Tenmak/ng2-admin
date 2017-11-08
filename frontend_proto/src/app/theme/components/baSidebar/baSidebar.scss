@@ -150,10 +150,12 @@ $angle-right: '\f101';
     }
   }
 
-  .slimScrollBar, .slimScrollRail {
-    border-radius: 0 !important;
-    width: $sidebar-scroll-width !important;
-    left: $sidebar-width - $sidebar-scroll-width;
+  .al-sidebar {
+    .slimScrollBar, .slimScrollRail {
+      border-radius: 0 !important;
+      width: $sidebar-scroll-width !important;
+      left: $sidebar-width - $sidebar-scroll-width;
+    }
   }
 
   .al-sidebar-sublist {
@@ -177,9 +179,11 @@ $angle-right: '\f101';
     top: 94px;
   }
 
-  .menu-collapsed {
-    .slimScrollBar, .slimScrollRail {
-      display: none !important;
+  .al-sidebar {
+    .menu-collapsed {
+      .slimScrollBar, .slimScrollRail {
+        display: none !important;
+      }
     }
-  }
+  }  
 }

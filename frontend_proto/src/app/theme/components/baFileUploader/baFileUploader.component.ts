@@ -1,21 +1,23 @@
 import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, Renderer } from '@angular/core';
-import { NgUploaderOptions } from 'ngx-uploader';
+// import { NgUploaderOptions } from 'ngx-uploader';
+
 @Component({
   selector: 'ba-file-uploader',
   styleUrls: ['./baFileUploader.scss'],
   templateUrl: './baFileUploader.html',
 })
 export class BaFileUploader {
-  @Input() fileUploaderOptions: NgUploaderOptions = { url: '' };
+  // @Input() fileUploaderOptions: NgUploaderOptions = { url: '' };
+  @Input() fileUploaderOptions: any = { url: '' };
   @Output() onFileUpload = new EventEmitter<any>();
   @Output() onFileUploadCompleted = new EventEmitter<any>();
-  @Input() defaultValue: string = '';
+  @Input() defaultValue = '';
 
   @ViewChild('fileUpload') public _fileUpload: ElementRef;
   @ViewChild('inputText') public _inputText: ElementRef;
 
   public uploadFileInProgress: boolean;
-  constructor(private renderer: Renderer) { 
+  constructor(private renderer: Renderer) {
   }
 
   bringFileSelector(): boolean {
@@ -24,7 +26,7 @@ export class BaFileUploader {
   }
 
   beforeFileUpload(uploadingFile): void {
-    let files = this._fileUpload.nativeElement.files;
+    const files = this._fileUpload.nativeElement.files;
     if (files.length) {
       const file = files[0];
       this._onChangeFileSelect(files[0])
