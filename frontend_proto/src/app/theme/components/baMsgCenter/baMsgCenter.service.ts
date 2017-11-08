@@ -11,7 +11,7 @@ export class BaMsgCenterService {
     },
   ];
 
-  public getNotifications():Array<Object> {
+  public getNotifications(): Array<Object> {
     return this._notifications;
   }
 }

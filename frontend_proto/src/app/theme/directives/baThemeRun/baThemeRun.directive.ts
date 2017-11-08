@@ -15,7 +15,7 @@ export class BaThemeRun {
 
   public ngOnInit(): void {
     this._assignTheme();
-    this._assignMobile(); 
+    this._assignMobile();
   }
 
   private _assignTheme(): void {

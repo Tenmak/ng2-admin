@@ -1,76 +1,78 @@
-// import {Component, ViewChild, Input, Output, EventEmitter, ElementRef, Renderer} from '@angular/core';
-// import { NgUploaderOptions } from 'ngx-uploader';
 
-// @Component({
-//   selector: 'ba-picture-uploader',
-//   styleUrls: ['./baPictureUploader.scss'],
-//   templateUrl: './baPictureUploader.html',
-// })
-// export class BaPictureUploader {
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, Renderer } from '@angular/core';
+import { } from 'ngx-uploader';
 
-//   @Input() defaultPicture:string = '';
-//   @Input() picture:string = '';
+@Component({
+  selector: 'ba-picture-uploader',
+  styleUrls: ['./baPictureUploader.scss'],
+  templateUrl: './baPictureUploader.html',
+})
+export class BaPictureUploader {
 
-//   @Input() uploaderOptions:NgUploaderOptions = { url: '' };
-//   @Input() canDelete:boolean = true;
+  @Input() defaultPicture = '';
+  @Input() picture = '';
 
-//   @Output() onUpload = new EventEmitter<any>();
-//   @Output() onUploadCompleted = new EventEmitter<any>();
+  // @Input() uploaderOptions: NgUploaderOptions = { url: '' };
+  @Input() uploaderOptions: any = { url: '' };
+  @Input() canDelete = true;
 
-//   @ViewChild('fileUpload') public _fileUpload:ElementRef;
+  @Output() onUpload = new EventEmitter<any>();
+  @Output() onUploadCompleted = new EventEmitter<any>();
 
-//   public uploadInProgress:boolean;
+  @ViewChild('fileUpload') public _fileUpload: ElementRef;
 
-//   constructor(private renderer: Renderer) {
-//   }
+  public uploadInProgress: boolean;
 
-//   beforeUpload(uploadingFile): void {
-//     let files = this._fileUpload.nativeElement.files;
+  constructor(private renderer: Renderer) {
+  }
 
-//     if (files.length) {
-//       const file = files[0];
-//       this._changePicture(file);
+  beforeUpload(uploadingFile): void {
+    const files = this._fileUpload.nativeElement.files;
 
-//       if (!this._canUploadOnServer()) {
-//         uploadingFile.setAbort();
-//       } else {
-//         this.uploadInProgress = true;
-//       }
-//     }
-//   }
+    if (files.length) {
+      const file = files[0];
+      this._changePicture(file);
 
-//   bringFileSelector():boolean {
-//     this.renderer.invokeElementMethod(this._fileUpload.nativeElement, 'click');
-//     return false;
-//   }
+      if (!this._canUploadOnServer()) {
+        uploadingFile.setAbort();
+      } else {
+        this.uploadInProgress = true;
+      }
+    }
+  }
 
-//   removePicture():boolean {
-//     this.picture = '';
-//     return false;
-//   }
+  bringFileSelector(): boolean {
+    this.renderer.invokeElementMethod(this._fileUpload.nativeElement, 'click');
+    return false;
+  }
 
-//   _changePicture(file:File):void {
-//     const reader = new FileReader();
-//     reader.addEventListener('load', (event:Event) => {
-//       this.picture = (<any> event.target).result;
-//     }, false);
-//     reader.readAsDataURL(file);
-//   }
+  removePicture(): boolean {
+    this.picture = '';
+    return false;
+  }
 
-//   _onUpload(data):void {
-//     if (data['done'] || data['abort'] || data['error']) {
-//       this._onUploadCompleted(data);
-//     } else {
-//       this.onUpload.emit(data);
-//     }
-//   }
+  _changePicture(file: File): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', (event: Event) => {
+      this.picture = (<any>event.target).result;
+    }, false);
+    reader.readAsDataURL(file);
+  }
 
-//   _onUploadCompleted(data):void {
-//     this.uploadInProgress = false;
-//     this.onUploadCompleted.emit(data);
-//   }
+  _onUpload(data): void {
+    if (data['done'] || data['abort'] || data['error']) {
+      this._onUploadCompleted(data);
+    } else {
+      this.onUpload.emit(data);
+    }
+  }
 
-//   _canUploadOnServer():boolean {
-//     return !!this.uploaderOptions['url'];
-//   }
-// }
+  _onUploadCompleted(data): void {
+    this.uploadInProgress = false;
+    this.onUploadCompleted.emit(data);
+  }
+
+  _canUploadOnServer(): boolean {
+    return !!this.uploaderOptions['url'];
+  }
+}
